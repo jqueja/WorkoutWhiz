@@ -17,3 +17,8 @@ These steps are required for any type of deployment when first accessing the sou
     cd react-frontend && npm install
     ```
 
+3. `Enter the project repository and install required dependencies`
+
+    ```bash
+    cd react-frontend && npm install react-bootstrap bootstrap
+    ```
