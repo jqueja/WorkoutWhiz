@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOMClient from "react-dom/client";
 import "./index.css";
+import App from "./App"
 
 function MyApp() {
   return (
-    <div>
-      <h1>Hello, React!</h1>
-    </div>
+    <App/>
   );
 }
 
