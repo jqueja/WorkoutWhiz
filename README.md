@@ -16,6 +16,11 @@ These steps are required for any type of deployment when first accessing the sou
     ```bash
     cd react-frontend && npm install
     cd react-frontend && npm install react-bootstrap bootstrap
+    cd react-frontend && npm install @mui/material --legacy-peer-deps
+
+
+
+    
     ```
 
 3. `Enter the project repository and install required dependencies`
