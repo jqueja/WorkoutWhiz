@@ -9,7 +9,7 @@ function NavHeader() {
     <Navbar className="justify-content-center" bg="success" variant="dark">
       <Nav>
         <Nav.Item>
-          <Nav.Link as={Link} to="/home">
+          <Nav.Link as={Link} to="/">
             MyWorkouts
           </Nav.Link>
         </Nav.Item>
