@@ -1,0 +1,9 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.table{
+  margin-bottom: 0 !important;
+  > :not(caption) > * > *{
+  padding: 0.1rem !important;
+  border-bottom-width: 0rem !important;
+  font-size:0.7rem;
+}}

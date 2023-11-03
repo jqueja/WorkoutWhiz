@@ -1,23 +1,23 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import MyTable from './Table.js'
+import WorkoutCard from './WorkoutCard.js'
+import LogWorkout from './LogWorkout.js'
 
 import Container from '@material-ui/core/Container';
+
 
 function Home() {
   return (
     <div>
-      <Container maxWidth="sm">
-      <Card style={{}}>
-        <Card.Body>
-          <Card.Title>11/1/23 - Wed</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Workout #3</Card.Subtitle>
-              <Card.Text>
-                <MyTable></MyTable>
-                </Card.Text>
-              </Card.Body>
-          </Card>
-    </Container>
+      <Container style={{ display:"flex", justifyContent: 'space-between', fontSize: "2rem", marginTop:"2rem", marginBottom:"1.5rem"}}>
+          My Workout Log
+          <LogWorkout style={{margin:"0"}}></LogWorkout>
+      </Container>
+        
+      <WorkoutCard></WorkoutCard>
+      <WorkoutCard></WorkoutCard>
+      <WorkoutCard></WorkoutCard>
+      <WorkoutCard></WorkoutCard>
+      <WorkoutCard></WorkoutCard>
     </div>
 
   )

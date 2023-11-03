@@ -16,7 +16,9 @@ These steps are required for any type of deployment when first accessing the sou
     ```bash
     cd react-frontend && npm install
     cd react-frontend && npm install react-bootstrap bootstrap
-    cd react-frontend && npm install @mui/material --legacy-peer-deps && npm install --save-dev @babel/plugin-proposal-private-property-in-object --legacy-peer-deps && npm install @mui/icons-material
+    cd react-frontend && npm install @mui/material --legacy-peer-deps && npm install --save-dev @babel/plugin-proposal-private-property-in-object --legacy-peer-deps && npm install @mui/icons-material && npm i @emotion/react @emotion/styled --legacy-peer-dep
+    cd react-frontend && npm install --save-dev sass-loader sass webpack && 
+
     ```
 
 3. `Enter the project repository and install required dependencies`
