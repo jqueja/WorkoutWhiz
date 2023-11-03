@@ -12,13 +12,11 @@ These steps are required for any type of deployment when first accessing the sou
     git clone https://github.com/jqueja/WorkoutWhiz.git
     ```
 2. `Enter the project repository and install required dependencies`
+    remove package_lock.json and node_modules
 
     ```bash
-    cd react-frontend && npm install
-    cd react-frontend && npm install react-bootstrap bootstrap
-    cd react-frontend && npm install @mui/material --legacy-peer-deps && npm install --save-dev @babel/plugin-proposal-private-property-in-object --legacy-peer-deps && npm install @mui/icons-material && npm i @emotion/react @emotion/styled --legacy-peer-dep
-    cd react-frontend && npm install --save-dev sass-loader sass webpack && 
-
+    cd react-frontend
+    npm i --legacy-peer-deps
     ```
 
 3. `Enter the project repository and install required dependencies`
