@@ -7,18 +7,18 @@ import Settings from "./components/Settings";
 import "./App.scss";
 
 function App() {
-    return (
-        <Router>
-            <div>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/settings" element={<Settings />} />
-                </Routes>
-                <NavHeader></NavHeader>
-            </div>
-        </Router>
-    );
+   return (
+      <Router>
+         <div>
+            <Routes>
+               <Route path="/" element={<Home />} />
+               <Route path="/analytics" element={<Analytics />} />
+               <Route path="/settings" element={<Settings />} />
+            </Routes>
+            <NavHeader></NavHeader>
+         </div>
+      </Router>
+   );
 }
 
 export default App;
