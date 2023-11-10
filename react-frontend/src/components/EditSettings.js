@@ -12,8 +12,8 @@ import Row from "react-bootstrap/Row";
 
 function EditSettings({ onUpdate, ...props }) {
      const [show, setShow] = useState(false);
-     const [firstname, setFirstName] = useState("");
-     const [lastname, setLastName] = useState("");
+     const [first_name, setFirstName] = useState("");
+     const [last_name, setLastName] = useState("");
      const [dob, setDob] = useState("");
      const [age, setAge] = useState("");
      const [gender, setGender] = useState("");
@@ -25,7 +25,7 @@ function EditSettings({ onUpdate, ...props }) {
      const handleSubmit = (event) => {
           event.preventDefault();
           // Assuming the form submission is successful
-          onUpdate({ firstname, lastname, dob, age, gender, weight, height });
+          onUpdate({ first_name, last_name, dob, age, gender, weight, height });
           handleClose();
      };
 
@@ -61,7 +61,7 @@ function EditSettings({ onUpdate, ...props }) {
                                         <Col>
                                              <Form.Control
                                                   placeholder="First name"
-                                                  value={firstname}
+                                                  value={first_name}
                                                   onChange={(e) =>
                                                        setFirstName(e.target.value)
                                                   }
@@ -70,7 +70,7 @@ function EditSettings({ onUpdate, ...props }) {
                                         <Col>
                                              <Form.Control
                                                   placeholder="Last name"
-                                                  value={lastname}
+                                                  value={last_name}
                                                   onChange={(e) =>
                                                        setLastName(e.target.value)
                                                   }
