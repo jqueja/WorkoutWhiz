@@ -1,8 +1,54 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss"; // Import your CSS file
+import supabase from "./supabase";
+import { useUser } from "../UserContext";
+
+/* eslint-disable react/no-unescaped-entities */
 
 function Login() {
+     const [email, setEmail] = useState("");
+     const [password, setPassword] = useState("");
+
+     const { userId, setUserId } = useUser();
+
+     const navigate = useNavigate(); // Replace useHistory with useNavigate
+
+     const handleEmailChange = (event) => {
+          setEmail(event.target.value);
+     };
+
+     const handlePasswordChange = (event) => {
+          setPassword(event.target.value);
+     };
+
+     const handleLogin = async () => {
+          try {
+               let { data: login, error } = await supabase
+                    .from("login")
+                    .select("*")
+                    .eq("email", email)
+                    .eq("password", password);
+
+               if (error) {
+                    console.error("Error fetching data:", error.message);
+               } else {
+                    if (login.length === 0) {
+                         console.log("No match found.");
+                         // Handle no match found case
+                    } else {
+                         setUserId(login[0].id);
+                         console.log("Current userId:", userId);
+                         // Handle successful login, e.g., redirect to a dashboard
+                         // Use history to navigate to the settings page
+                         navigate("/settings");
+                    }
+               }
+          } catch (error) {
+               console.error("Error during login:", error.message);
+          }
+     };
+
      return (
           <section className="vh-100 gradient-custom-light">
                <div className="container py-5 h-100">
@@ -24,6 +70,10 @@ function Login() {
                                                        type="email"
                                                        id="typeEmailX"
                                                        className="form-control form-control-lg"
+                                                       value={email}
+                                                       onChange={
+                                                            handleEmailChange
+                                                       }
                                                   />
                                                   <label
                                                        className="form-label"
@@ -38,12 +88,17 @@ function Login() {
                                                        type="password"
                                                        id="typePasswordX"
                                                        className="form-control form-control-lg"
+                                                       value={password}
+                                                       onChange={
+                                                            handlePasswordChange
+                                                       }
                                                   />
                                                   <label
                                                        className="form-label"
                                                        htmlFor="typePasswordX"
                                                   >
-                                                       Password
+                                                       Password{" "}
+                                                       {/* eslint-disable-next-line */}
                                                   </label>
                                              </div>
 
@@ -52,13 +107,16 @@ function Login() {
                                                        className="text-black-50"
                                                        href="#!"
                                                   >
-                                                       Forgot password?
+                                                       <Link to="/forgot-password">
+                                                            Forgot password?
+                                                       </Link>
                                                   </a>
                                              </p>
 
                                              <button
                                                   className="btn btn-outline-dark btn-lg px-5"
-                                                  type="submit"
+                                                  type="button"
+                                                  onClick={handleLogin}
                                              >
                                                   Login
                                              </button>

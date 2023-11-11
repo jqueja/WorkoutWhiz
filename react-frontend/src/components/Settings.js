@@ -3,10 +3,14 @@ import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
 import supabase from "./supabase";
+import { useUser } from "../UserContext";
 
 import "./Components.scss";
 
 function Settings() {
+     const { userId } = useUser();
+     console.log("Current userId:", userId);
+
      const [userSettings, setUserSettings] = useState({
           first_name: "",
           last_name: "",
@@ -18,19 +22,18 @@ function Settings() {
      });
 
      const handleUpdate = async (updatedSettings) => {
-
-        const nonEmptySettings = Object.keys(updatedSettings)
-             .filter((key) => updatedSettings[key] !== "")
-             .reduce((obj, key) => {
-                  obj[key] = updatedSettings[key];
-                  return obj;
-             }, {});
+          const nonEmptySettings = Object.keys(updatedSettings)
+               .filter((key) => updatedSettings[key] !== "")
+               .reduce((obj, key) => {
+                    obj[key] = updatedSettings[key];
+                    return obj;
+               }, {});
 
           try {
                const { data, error } = await supabase
                     .from("users")
                     .update(nonEmptySettings)
-                    .eq("user_id", 1);
+                    .eq("user_id", userId);
 
                if (error) {
                     console.error("Error updating Supabase data:", error);
@@ -53,7 +56,7 @@ function Settings() {
                     const { data, error } = await supabase
                          .from("users")
                          .select("*")
-                         .eq("user_id", 1);
+                         .eq("user_id", userId);
 
                     console.log("Data:", data); // Log data
                     console.log("Error:", error); // Log error
@@ -69,7 +72,7 @@ function Settings() {
           };
 
           fetchUserSettings();
-     }, []);
+     }, [userId]);
 
      return (
           <div>
