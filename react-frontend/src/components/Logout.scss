@@ -1,0 +1,44 @@
+.vh-100 {
+     height: 100vh; /* 100% of the viewport height */
+}
+
+.vw-100 {
+     width: 100vw; /* 100% of the viewport width */
+}
+
+.gradient-custom {
+     /* Your gradient styles go here */
+     background: white;
+     //  background: -webkit-linear-gradient(
+     //       to right,
+     //       rgba(106, 17, 203, 1),
+     //       rgba(37, 117, 252, 1)
+     //  );
+     //  background: linear-gradient(
+     //       to right,
+     //       rgba(106, 17, 203, 1),
+     //       rgba(37, 117, 252, 1)
+     //  );
+}
+
+.container {
+     height: 100%;
+}
+
+.row {
+     height: 100%;
+}
+
+.card {
+     width: 100%;
+}
+
+.btn-sm {
+     font-size: 0.875rem;
+}
+
+.float-end {
+     float: right;
+}
+
+/* Additional styles for your card, card-body, and other elements go here */
