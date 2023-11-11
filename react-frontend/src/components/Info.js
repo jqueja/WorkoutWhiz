@@ -37,7 +37,7 @@ function Info() {
           e.preventDefault();
           // Handle form submission logic here
           console.log("Form data submitted:", formData);
-          navigate("/login");
+          navigate("/successul-signup");
      };
 
      return (
