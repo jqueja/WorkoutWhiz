@@ -40,18 +40,18 @@
 }
 
 .form-label {
-     position: absolute;
-     top: 10px;
-     left: 0;
+     // position: absolute;
+     // top: 10px;
+     // left: 0;
      transition: 0.2s;
      color: black; /* Adjusted color property for form labels */
 }
 
-.form-control:focus ~ .form-label,
-.form-control:not(:placeholder-shown) ~ .form-label {
-     top: -15px;
-     font-size: 12px;
-}
+// .form-control:focus ~ .form-label,
+// .form-control:not(:placeholder-shown) ~ .form-label {
+//      // top: -15px;
+//      // font-size: 12px;
+// }
 
 .btn-outline-dark {
      border-color: black; /* Adjusted border color for the button */

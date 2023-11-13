@@ -51,7 +51,9 @@ function EditSettings({ onUpdate, ...props }) {
                     style={{ height: "25rem" }}
                >
                     <Offcanvas.Header closeButton>
-                         <Offcanvas.Title>Edit User Settings</Offcanvas.Title>
+                         <Offcanvas.Title>
+                              Edit User Information
+                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                          <Form noValidate onSubmit={handleSubmit}>
@@ -63,7 +65,9 @@ function EditSettings({ onUpdate, ...props }) {
                                                   placeholder="First name"
                                                   value={first_name}
                                                   onChange={(e) =>
-                                                       setFirstName(e.target.value)
+                                                       setFirstName(
+                                                            e.target.value
+                                                       )
                                                   }
                                              />
                                         </Col>
@@ -72,7 +76,9 @@ function EditSettings({ onUpdate, ...props }) {
                                                   placeholder="Last name"
                                                   value={last_name}
                                                   onChange={(e) =>
-                                                       setLastName(e.target.value)
+                                                       setLastName(
+                                                            e.target.value
+                                                       )
                                                   }
                                              />
                                         </Col>
