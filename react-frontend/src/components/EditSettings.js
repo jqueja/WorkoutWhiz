@@ -32,12 +32,13 @@ function EditSettings({ onUpdate, ...props }) {
      return (
           <>
                <Button
-                    variant="success"
                     onClick={handleShow}
                     style={{
                          height: "3rem",
                          width: "3rem",
                          padding: "0rem",
+                         background: "#7AE2E9",
+                         borderColor: "#7AE2E9",
                     }}
                >
                     <EditRoundedIcon className="page-icon"></EditRoundedIcon>
@@ -152,7 +153,15 @@ function EditSettings({ onUpdate, ...props }) {
                                         justifyContent: "Center",
                                    }}
                               >
-                                   <Button type="submit">Submit</Button>
+                                   <Button
+                                        type="submit"
+                                        style={{
+                                             background: "#8286e5",
+                                             borderColor: "#8286e5",
+                                        }}
+                                   >
+                                        Submit
+                                   </Button>
                               </div>
                          </Form>
                     </Offcanvas.Body>

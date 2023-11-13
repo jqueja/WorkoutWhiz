@@ -71,12 +71,10 @@ function Settings() {
      return (
           <div>
                <Container
+                    className="page-header"
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
-                         fontSize: "2rem",
-                         marginTop: "2rem",
-                         marginBottom: "1.5rem",
                     }}
                >
                     Settings
