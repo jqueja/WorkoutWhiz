@@ -9,6 +9,7 @@ import Logout from "./components/Logout";
 import Info from "./components/Info";
 import Signup from "./components/Signup";
 import SuccessfulSignup from "./components/SuccessfulSignup";
+import ForgotPassword from "./components/ForgotPassword";
 import "./App.scss";
 import { Container } from "@mui/system";
 
@@ -78,6 +79,10 @@ function App() {
                          <Route
                               path="/successul-signup"
                               element={<SuccessfulSignup />}
+                         />
+                         <Route
+                              path="/forgot-password"
+                              element={<ForgotPassword />}
                          />
                     </Routes>
                </div>

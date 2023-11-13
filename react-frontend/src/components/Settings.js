@@ -2,11 +2,15 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
-import Supabase from "./Supabase";
+import supabase from "./supabase";
+import { useUser } from "../UserContext";
 
 import "./Components.scss";
 
 function Settings() {
+     const { userId } = useUser();
+     console.log("Current userId:", userId);
+
      const [userSettings, setUserSettings] = useState({
           first_name: "",
           last_name: "",
@@ -26,9 +30,10 @@ function Settings() {
                }, {});
 
           try {
-               const { data, error } = await Supabase.from("users")
+               const { data, error } = await supabase
+                    .from("users")
                     .update(nonEmptySettings)
-                    .eq("user_id", 1);
+                    .eq("user_id", userId);
 
                if (error) {
                     console.error("Error updating Supabase data:", error);
@@ -48,9 +53,10 @@ function Settings() {
      useEffect(() => {
           const fetchUserSettings = async () => {
                try {
-                    const { data, error } = await Supabase.from("users")
+                    const { data, error } = await supabase
+                         .from("users")
                          .select("*")
-                         .eq("user_id", 1);
+                         .eq("user_id", userId);
 
                     console.log("Data:", data); // Log data
                     console.log("Error:", error); // Log error
@@ -66,15 +72,17 @@ function Settings() {
           };
 
           fetchUserSettings();
-     }, []);
+     }, [userId]);
 
      return (
           <div>
                <Container
-                    className="page-header"
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
+                         fontSize: "2rem",
+                         marginTop: "2rem",
+                         marginBottom: "1.5rem",
                     }}
                >
                     Settings
@@ -84,19 +92,19 @@ function Settings() {
                     />
                </Container>
                <Container>
-                    First Name: {userSettings.first_name}
+                    FirstName: {userSettings.first_name}
                     <br />
-                    Last Name: {userSettings.last_name}
+                    LastName: {userSettings.last_name}
                     <br />
-                    Date of Birth: {userSettings.dob}
+                    DOB: {userSettings.dob}
                     <br />
                     Age: {userSettings.age}
-                    <br />
-                    Gender: {userSettings.gender}
                     <br />
                     Weight: {userSettings.weight}
                     <br />
                     Height: {userSettings.height}
+                    <br />
+                    Gender: {userSettings.gender}
                     <br />
                </Container>
           </div>
