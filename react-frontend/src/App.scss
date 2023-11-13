@@ -2,3 +2,30 @@
 @import './components/WorkoutCard.scss';
 @import './components/NavHeader.scss';
 
+.gradient-header{
+    width: 390px;
+    height: 46px;
+    flex-shrink:0;
+    background: linear-gradient(167deg, #7AE2E9 5.13%, rgba(64, 71, 237, 0.57) 359.94%);
+    color: white;
+    font-family: MPLUS1;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding-top: 10px;
+}
+
+*{
+  font-family: montserrat;
+}
+
+@font-face {
+  font-family: MPLUS1;
+  src: url(MPLUS1-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: montserrat;
+  src: url(Montserrat-VariableFont_wght.ttf);
+}

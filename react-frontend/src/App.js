@@ -11,6 +11,7 @@ import Signup from "./components/Signup";
 import SuccessfulSignup from "./components/SuccessfulSignup";
 import ForgotPassword from "./components/ForgotPassword";
 import "./App.scss";
+import { Container } from "@mui/system";
 
 function App() {
      return (
@@ -22,6 +23,21 @@ function App() {
                               path="/"
                               element={
                                    <React.Fragment>
+                                        <Container className="gradient-header">
+                                             WORKOUT WHIZ
+                                        </Container>
+                                        <Home />
+                                        <NavHeader />
+                                   </React.Fragment>
+                              }
+                         />
+                         <Route
+                              path="/"
+                              element={
+                                   <React.Fragment>
+                                        <Container className="gradient-header">
+                                             WORKOUT WHIZ
+                                        </Container>
                                         <Home />
                                         <NavHeader />
                                    </React.Fragment>
@@ -31,6 +47,9 @@ function App() {
                               path="/analytics"
                               element={
                                    <React.Fragment>
+                                        <Container className="gradient-header">
+                                             WORKOUT WHIZ
+                                        </Container>
                                         <Analytics />
                                         <NavHeader />
                                    </React.Fragment>
@@ -40,6 +59,9 @@ function App() {
                               path="/settings"
                               element={
                                    <React.Fragment>
+                                        <Container className="gradient-header">
+                                             WORKOUT WHIZ
+                                        </Container>
                                         <Settings />
                                         <NavHeader />
                                    </React.Fragment>
