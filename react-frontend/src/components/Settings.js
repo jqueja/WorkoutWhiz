@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
-import supabase from "./supabase";
+import Supabase from "./Supabase";
 
 import "./Components.scss";
 
@@ -18,17 +18,15 @@ function Settings() {
      });
 
      const handleUpdate = async (updatedSettings) => {
-
-        const nonEmptySettings = Object.keys(updatedSettings)
-             .filter((key) => updatedSettings[key] !== "")
-             .reduce((obj, key) => {
-                  obj[key] = updatedSettings[key];
-                  return obj;
-             }, {});
+          const nonEmptySettings = Object.keys(updatedSettings)
+               .filter((key) => updatedSettings[key] !== "")
+               .reduce((obj, key) => {
+                    obj[key] = updatedSettings[key];
+                    return obj;
+               }, {});
 
           try {
-               const { data, error } = await supabase
-                    .from("users")
+               const { data, error } = await Supabase.from("users")
                     .update(nonEmptySettings)
                     .eq("user_id", 1);
 
@@ -50,8 +48,7 @@ function Settings() {
      useEffect(() => {
           const fetchUserSettings = async () => {
                try {
-                    const { data, error } = await supabase
-                         .from("users")
+                    const { data, error } = await Supabase.from("users")
                          .select("*")
                          .eq("user_id", 1);
 

@@ -87,7 +87,7 @@ function Login() {
 
                                         <div>
                                              <p className="mb-0">
-                                                  Don't have an account?{" "}
+                                                  {`Dont&apos;t have a account?`}{" "}
                                                   <Link
                                                        to="/signup"
                                                        className="text-black-50 fw-bold"
