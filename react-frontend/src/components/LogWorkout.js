@@ -8,32 +8,46 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import "./Components.scss";
-import useWorkoutLocalStorage from "./useWorkoutLocalStorage.js";
 
 function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
+     // OffCanvas states
      const [show, setShow] = useState(false);
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
 
-     const [data, setData] = useState({
-          date: "",
+     // Workout Data states
+     const [date, setDate] = useState("");
+     const [saveData, setSaveData] = useState("");
+     const [weightData, setWeightData] = useState({
           workoutName: "",
           weight: "",
           reps: "",
           sets: "",
      });
+     const [data, setData] = useState({
+          weightlifting: [],
+     });
 
-     let [saveData, setSaveData] = useWorkoutLocalStorage(data.date, data);
+     // Accessing local storage
+     function useWorkoutLocalStorage(key, initialValue) {
+          console.log(key, initialValue);
+          const savedValue = JSON.parse(localStorage.getItem(key));
+          // check entries with the same date
+          if (savedValue) {
+               savedValue.push(initialValue);
+               localStorage.setItem(key, JSON.stringify(savedValue));
+          } else {
+               localStorage.setItem(key, JSON.stringify([initialValue].flat()));
+          }
+          return null;
+     }
 
      const updateField = (e) => {
-          setData((data) => ({
-               ...data,
+          // update weight info
+          setWeightData((weightData) => ({
+               ...weightData,
                [e.target.name]: e.target.value,
           }));
-          setSaveData({
-               ...saveData,
-               [e.target.name]: e.target.value,
-          });
      };
 
      const handleSubmit = (e) => {
@@ -42,13 +56,23 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
           //      event.preventDefault();
           //      event.stopPropagation();
           // }
+          //setValidated(true);
 
           e.preventDefault();
-          handleClose();
-          handleLogWorkoutSubmit();
+          // set data object
+          setData({
+               weightlifting: weightData,
+          });
 
-          //props.setWorkoutID(props.workoutID + 1);
-          //setValidated(true);
+          // save data object
+          setSaveData({
+               date: date,
+               data: data,
+          });
+          useWorkoutLocalStorage(date, weightData);
+
+          handleLogWorkoutSubmit();
+          handleClose();
      };
 
      return (
@@ -91,8 +115,10 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                    <Form.Control
                                         type="date"
                                         name="date"
-                                        value={data.date}
-                                        onChange={updateField}
+                                        value={date}
+                                        onChange={(e) =>
+                                             setDate(e.target.value)
+                                        }
                                         //isInvalid={!!errors.date}
                                    />
                                    {/* <Form.Control.Feedback type='invalid'>
@@ -131,7 +157,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                    </Form.Label>
                                    <Form.Control
                                         name="workoutName"
-                                        value={data.workoutName}
+                                        value={weightData.workoutName}
                                         onChange={updateField}
                                    />
                               </Form.Group>
@@ -148,7 +174,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              <Form.Control
                                                   placeholder="lbs"
                                                   name="weight"
-                                                  value={data.weight}
+                                                  value={weightData.weight}
                                                   onChange={updateField}
                                              />
                                         </Form.Group>
@@ -162,7 +188,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              </Form.Label>
                                              <Form.Control
                                                   name="sets"
-                                                  value={data.sets}
+                                                  value={weightData.sets}
                                                   onChange={updateField}
                                              />
                                         </Form.Group>
@@ -176,7 +202,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              </Form.Label>
                                              <Form.Control
                                                   name="reps"
-                                                  value={data.reps}
+                                                  value={weightData.reps}
                                                   onChange={updateField}
                                              />
                                         </Form.Group>

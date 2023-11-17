@@ -3,16 +3,24 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Container from "@material-ui/core/Container";
 
-//import "./WorkoutCard.css";
+// Create content in card
+function CardTable(props) {
+     // map data into rows by workoutName
+     const rows = props.item.map((row, index) => {
+          return (
+               <tr key={index}>
+                    <td>{row.workoutName}</td>
+                    <td>{row.weight}</td>
+                    <td>{row.sets}</td>
+                    <td>{row.reps}</td>
+               </tr>
+          );
+     });
+     return rows;
+}
 
-function WorkoutCard(...props) {
-     //From local storage objects
-     const date = props["0"].item["0"];
-     const workoutName = props["0"].item["1"].workoutName;
-     const sets = props["0"].item["1"].sets;
-     const reps = props["0"].item["1"].reps;
-     const weight = props["0"].item["1"].weight;
-
+function WorkoutCard(props) {
+     const date = props.date;
      return (
           <Container style={{ marginTop: "1rem" }}>
                <Card>
@@ -25,9 +33,6 @@ function WorkoutCard(...props) {
                          >
                               {date}
                          </Card.Title>
-                         {/* <Card.Subtitle className="mb-2 text-muted">
-                              Workout #{props.workoutID}
-                         </Card.Subtitle> */}
                          <Card.Text>
                               <Table>
                                    <thead>
@@ -40,12 +45,9 @@ function WorkoutCard(...props) {
                                    </thead>
 
                                    <tbody>
-                                        <tr>
-                                             <td>{workoutName}</td>
-                                             <td>{weight}</td>
-                                             <td>{sets}</td>
-                                             <td>{reps}</td>
-                                        </tr>
+                                        <CardTable
+                                             item={props.item}
+                                        ></CardTable>
                                    </tbody>
                               </Table>
                          </Card.Text>
