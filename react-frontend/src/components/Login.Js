@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss"; // Import your CSS file
-import supabase from "./supabase";
+import supabase from "./Supabase";
 import { useUser } from "../UserContext";
 
 /* eslint-disable react/no-unescaped-entities */
@@ -41,7 +41,7 @@ function Login() {
                          console.log("Current userId:", userId);
                          // Handle successful login, e.g., redirect to a dashboard
                          // Use history to navigate to the settings page
-                         navigate("/settings");
+                         navigate("/");
                     }
                }
           } catch (error) {
