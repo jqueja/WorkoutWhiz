@@ -89,11 +89,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Form.Group as={Col} controlId="formGender">
                                         <Form.Label>Gender</Form.Label>
                                         <Form.Select
-                                             defaultValue="Choose..."
+                                             value={gender}
                                              onChange={(e) =>
                                                   setGender(e.target.value)
                                              }
                                         >
+                                             <option>Select</option>
                                              <option value="Female">
                                                   Female
                                              </option>
@@ -159,8 +160,9 @@ function EditSettings({ onUpdate, ...props }) {
                                              background: "#8286e5",
                                              borderColor: "#8286e5",
                                         }}
+                                        onClick={handleClose}
                                    >
-                                        Submit
+                                        Save
                                    </Button>
                               </div>
                          </Form>

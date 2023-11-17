@@ -5,23 +5,50 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import "./Components.scss";
+import useWorkoutLocalStorage from "./useWorkoutLocalStorage.js";
 
-function LogWorkout({ ...props }) {
+function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      const [show, setShow] = useState(false);
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
 
-     const [validated, setValidated] = useState(false);
+     const [data, setData] = useState({
+          date: "",
+          workoutName: "",
+          weight: "",
+          reps: "",
+          sets: "",
+     });
 
-     const handleSubmit = (event) => {
-          const form = event.currentTarget;
-          if (form.checkValidity() === false) {
-               event.preventDefault();
-               event.stopPropagation();
-          }
-          setValidated(true);
+     let [saveData, setSaveData] = useWorkoutLocalStorage(data.date, data);
+
+     const updateField = (e) => {
+          setData((data) => ({
+               ...data,
+               [e.target.name]: e.target.value,
+          }));
+          setSaveData({
+               ...saveData,
+               [e.target.name]: e.target.value,
+          });
+     };
+
+     const handleSubmit = (e) => {
+          //const form = event.currentTarget;
+          // if (form.checkValidity() === false) {
+          //      event.preventDefault();
+          //      event.stopPropagation();
+          // }
+
+          e.preventDefault();
+          handleClose();
+          handleLogWorkoutSubmit();
+
+          //props.setWorkoutID(props.workoutID + 1);
+          //setValidated(true);
      };
 
      return (
@@ -38,49 +65,126 @@ function LogWorkout({ ...props }) {
                >
                     <AddRoundedIcon className="page-icon"></AddRoundedIcon>
                </Button>
-
                <Offcanvas
                     placement="bottom"
                     show={show}
                     onHide={handleClose}
                     {...props}
-                    style={{ height: "18rem" }}
+                    style={{ height: "auto" }}
                >
-                    <Offcanvas.Header closeButton>
+                    <Offcanvas.Header
+                         closeButton
+                         style={{ paddingBottom: "8px" }}
+                    >
                          <Offcanvas.Title>Log a new workout</Offcanvas.Title>
                     </Offcanvas.Header>
-                    <Offcanvas.Body>
+                    <Offcanvas.Body style={{ paddingTop: "8px" }}>
                          <Form
                               noValidate
-                              validated={validated}
+                              // validated={validated}
                               onSubmit={handleSubmit}
                          >
-                              <Form.Select
-                                   aria-label="Exercise Input"
+                              <Form.Group
                                    style={{ marginBottom: "2rem" }}
+                                   className="mb-3"
                               >
-                                   <option value="1">Weightlifting</option>
-                                   <option value="2">Distance</option>
-                              </Form.Select>
-
-                              <InputGroup style={{ marginBottom: "2rem" }}>
-                                   <InputGroup.Text size="sm">
-                                        Weight
-                                   </InputGroup.Text>
                                    <Form.Control
-                                        placeholder="lbs"
-                                        aria-label="Weight"
+                                        type="date"
+                                        name="date"
+                                        value={data.date}
+                                        onChange={updateField}
+                                        //isInvalid={!!errors.date}
                                    />
+                                   {/* <Form.Control.Feedback type='invalid'>
+                                        {errors.date}
+                                   </Form.Control.Feedback> */}
+                              </Form.Group>
 
-                                   <InputGroup.Text id="basic-addon1">
-                                        Sets
-                                   </InputGroup.Text>
-                                   <Form.Control aria-label="Sets" />
-                                   <InputGroup.Text id="basic-addon1">
-                                        Reps
-                                   </InputGroup.Text>
-                                   <Form.Control aria-label="Reps" />
-                              </InputGroup>
+                              <Form.Group
+                                   style={{ marginBottom: "2rem" }}
+                                   className="mb-3"
+                              >
+                                   <Form.Label>Select Exercise Type</Form.Label>
+
+                                   <Form.Select
+                                        name="exercise"
+                                        value={data.exercise}
+                                        onChange={updateField}
+                                   >
+                                        <option value="weightlifting">
+                                             Weightlifting
+                                        </option>
+                                        <option value="distance">
+                                             Distance
+                                        </option>
+                                   </Form.Select>
+                              </Form.Group>
+                              <Form.Group
+                                   style={{ marginBottom: "2rem" }}
+                                   className="mb-3"
+                              >
+                                   <Form.Label>
+                                        {" "}
+                                        {data.exercise === "distance"
+                                             ? "Distance Activity Name"
+                                             : "Weightlifiting Exercise Name"}
+                                   </Form.Label>
+                                   <Form.Control
+                                        name="workoutName"
+                                        value={data.workoutName}
+                                        onChange={updateField}
+                                   />
+                              </Form.Group>
+                              {data.exercise !== "distance" ? (
+                                   <Row>
+                                        <Form.Group
+                                             style={{ marginBottom: "2rem" }}
+                                             className="mb-3"
+                                             as={Col}
+                                        >
+                                             <Form.Label className="text-center">
+                                                  Weight
+                                             </Form.Label>
+                                             <Form.Control
+                                                  placeholder="lbs"
+                                                  name="weight"
+                                                  value={data.weight}
+                                                  onChange={updateField}
+                                             />
+                                        </Form.Group>
+                                        <Form.Group
+                                             style={{ marginBottom: "2rem" }}
+                                             className="mb-3"
+                                             as={Col}
+                                        >
+                                             <Form.Label className="text-center">
+                                                  Sets
+                                             </Form.Label>
+                                             <Form.Control
+                                                  name="sets"
+                                                  value={data.sets}
+                                                  onChange={updateField}
+                                             />
+                                        </Form.Group>
+                                        <Form.Group
+                                             style={{ marginBottom: "2rem" }}
+                                             className="mb-3"
+                                             as={Col}
+                                        >
+                                             <Form.Label className="text-center">
+                                                  Reps
+                                             </Form.Label>
+                                             <Form.Control
+                                                  name="reps"
+                                                  value={data.reps}
+                                                  onChange={updateField}
+                                             />
+                                        </Form.Group>
+                                   </Row>
+                              ) : (
+                                   ""
+                              )}
+
                               <div
                                    style={{
                                         display: "flex",

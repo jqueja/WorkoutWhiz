@@ -5,7 +5,14 @@ import Container from "@material-ui/core/Container";
 
 //import "./WorkoutCard.css";
 
-function WorkoutCard() {
+function WorkoutCard(...props) {
+     //From local storage objects
+     const date = props["0"].item["0"];
+     const workoutName = props["0"].item["1"].workoutName;
+     const sets = props["0"].item["1"].sets;
+     const reps = props["0"].item["1"].reps;
+     const weight = props["0"].item["1"].weight;
+
      return (
           <Container style={{ marginTop: "1rem" }}>
                <Card>
@@ -16,11 +23,11 @@ function WorkoutCard() {
                                    fontFamily: "M PLUS 1",
                               }}
                          >
-                              11/1/23 - Wed
+                              {date}
                          </Card.Title>
-                         <Card.Subtitle className="mb-2 text-muted">
-                              Workout #3
-                         </Card.Subtitle>
+                         {/* <Card.Subtitle className="mb-2 text-muted">
+                              Workout #{props.workoutID}
+                         </Card.Subtitle> */}
                          <Card.Text>
                               <Table>
                                    <thead>
@@ -34,22 +41,10 @@ function WorkoutCard() {
 
                                    <tbody>
                                         <tr>
-                                             <td>Glute Bridges</td>
-                                             <td>15</td>
-                                             <td>3</td>
-                                             <td>10</td>
-                                        </tr>
-                                        <tr>
-                                             <td>Romanian Deadlifts</td>
-                                             <td>20</td>
-                                             <td>3</td>
-                                             <td>10</td>
-                                        </tr>
-                                        <tr>
-                                             <td>Goblet Squats</td>
-                                             <td>10</td>
-                                             <td>3</td>
-                                             <td>8</td>
+                                             <td>{workoutName}</td>
+                                             <td>{weight}</td>
+                                             <td>{sets}</td>
+                                             <td>{reps}</td>
                                         </tr>
                                    </tbody>
                               </Table>
