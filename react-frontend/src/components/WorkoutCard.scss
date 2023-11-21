@@ -2,12 +2,10 @@
 
 .table{
   margin-bottom: 0 !important;
+  table-layout: fixed !important;
   > :not(caption) > * > *{
   padding: 0.1rem !important;
   border-bottom-width: 0rem !important;
   font-size:0.7rem;
 }}
 
-body{
-  font-family: M PLUS 1 !important;
-}

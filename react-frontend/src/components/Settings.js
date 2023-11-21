@@ -4,6 +4,7 @@ import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
 import supabase from "./Supabase";
 import { useUser } from "../UserContext";
+import { motion } from "framer-motion";
 
 import "./Components.scss";
 
@@ -75,7 +76,12 @@ function Settings() {
      }, [userId]);
 
      return (
-          <div>
+          <motion.div
+               initial={{ translateX: "-100%" }}
+               animate={{
+                    translateX: 0,
+               }}
+          >
                <Container
                     className="page-header"
                     style={{
@@ -105,7 +111,7 @@ function Settings() {
                     Height: {userSettings.height}
                     <br />
                </Container>
-          </div>
+          </motion.div>
      );
 }
 

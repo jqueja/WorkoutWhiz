@@ -1,21 +1,16 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-//import { useState } from "react";
-// import WeightliftCarousel from "./WeightliftCarousel.js";
-
-// import DistanceCarousel from "./DistanceCarousel.js";
-
-// import Carousel from "react-bootstrap/Carousel";
+import { motion } from "framer-motion";
 
 function Music() {
-     //const [index, setIndex] = useState(0);
-
-     // const handleSelect = (selectedIndex) => {
-     //      setIndex(selectedIndex);
-     // };
      //https://open.spotify.com/playlist/4IzIb3lor60mKXDrAe4ldg?si=9befbe7623294099
      return (
-          <div>
+          <motion.div
+               initial={{ translateX: "-100%" }}
+               animate={{
+                    translateX: 0,
+               }}
+          >
                <Container
                     className="page-header"
                     style={{
@@ -52,7 +47,7 @@ function Music() {
                          <DistanceCarousel />
                     </Carousel.Item>
                </Carousel> */}
-          </div>
+          </motion.div>
      );
 }
 

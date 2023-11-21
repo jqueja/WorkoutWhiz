@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import WorkoutCard from "./WorkoutCard.js";
 import LogWorkout from "./LogWorkout.js";
 import Container from "@material-ui/core/Container";
+import { motion } from "framer-motion";
 
 function Home() {
      // Access local storage for list of date-workout objects
@@ -50,7 +51,12 @@ function Home() {
      });
 
      return (
-          <div>
+          <motion.div
+               initial={{ translateX: "-100%" }}
+               animate={{
+                    translateX: 0,
+               }}
+          >
                <Container
                     className="page-header"
                     style={{
@@ -65,7 +71,7 @@ function Home() {
                     ></LogWorkout>
                </Container>
                {workoutCardList}
-          </div>
+          </motion.div>
      );
 }
 
