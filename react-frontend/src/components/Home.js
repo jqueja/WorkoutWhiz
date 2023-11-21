@@ -1,47 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import WorkoutCard from "./WorkoutCard.js";
 import LogWorkout from "./LogWorkout.js";
-import { useEffect } from "react";
-
 import Container from "@material-ui/core/Container";
-//import useWorkoutLocalStorage from "./useWorkoutLocalStorage.js";
 
 function Home() {
      // Access local storage for list of date-workout objects
-     const [data, setData] = useState([]);
+     const [data, setData] = useState({ ...localStorage });
+
+     // update data after submit
+     const handleLogWorkoutSubmit = () => {
+          setData({ ...localStorage });
+     };
+
+     // update data array after data is modified
      useEffect(() => {
-          //const items = { ...localStorage };
           var result = [];
           for (var i in data) {
                try {
-                    result.push([i, JSON.parse(data[i])]); // make into array to map
+                    result.push([i.toString(), JSON.parse(data[i])]); // make into array to map
                } catch {
                     continue;
                }
           }
      }, [data]);
 
-     console.log(data);
-     const handleLogWorkoutSubmit = () => {
-          console.log("LogWorkout submitted. Triggering re-render...");
-          setData({ ...localStorage });
-     };
-
-     //const items = { ...localStorage };
+     // format data array in order to map data into components
      var result = [];
      for (var i in data) {
           try {
-               result.push([i, JSON.parse(data[i])]); // make into array to map
+               result.push([i, JSON.parse(data[i])]);
           } catch {
                continue;
           }
      }
-     const workoutCardList = result.map((item) => {
-          if (item[1].workoutName) {
-               console.log(result);
-               return <WorkoutCard key={item.date} item={item}></WorkoutCard>;
-          }
-          return null;
+     // order by descending date
+     result.sort(function (a, b) {
+          return b[0].localeCompare(a[0]);
+     });
+
+     // create workout cards
+     const workoutCardList = result.map((card) => {
+          return (
+               <WorkoutCard
+                    key={card[0]}
+                    date={card[0]}
+                    item={card[1]}
+               ></WorkoutCard>
+          );
      });
 
      return (

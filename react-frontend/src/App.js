@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavHeader from "./components/NavHeader";
 import Home from "./components/Home";
-import Analytics from "./components/Analytics";
+import Music from "./components/Music";
 import Settings from "./components/Settings";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
@@ -44,13 +44,13 @@ function App() {
                               }
                          />
                          <Route
-                              path="/analytics"
+                              path="/music"
                               element={
                                    <React.Fragment>
                                         <Container className="gradient-header">
                                              WORKOUT WHIZ
                                         </Container>
-                                        <Analytics />
+                                        <Music />
                                         <NavHeader />
                                    </React.Fragment>
                               }

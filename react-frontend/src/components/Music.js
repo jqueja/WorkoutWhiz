@@ -7,12 +7,13 @@ import Container from "@material-ui/core/Container";
 
 // import Carousel from "react-bootstrap/Carousel";
 
-function Analytics() {
+function Music() {
      //const [index, setIndex] = useState(0);
 
      // const handleSelect = (selectedIndex) => {
      //      setIndex(selectedIndex);
      // };
+     //https://open.spotify.com/playlist/4IzIb3lor60mKXDrAe4ldg?si=9befbe7623294099
      return (
           <div>
                <Container
@@ -34,7 +35,7 @@ function Analytics() {
                     {" "}
                     <iframe
                          style={{ borderRadius: "12px" }}
-                         src="https://open.spotify.com/embed/playlist/4jwOXOlk6eUe3Oh2B515mZ?utm_source=generator"
+                         src="https://open.spotify.com/embed/playlist/4jwOXOlk6eUe3Oh2B515mZ?utm_source=generator&theme=0"
                          width="100%"
                          height="500"
                          frameBorder="0"
@@ -55,4 +56,4 @@ function Analytics() {
      );
 }
 
-export default Analytics;
+export default Music;

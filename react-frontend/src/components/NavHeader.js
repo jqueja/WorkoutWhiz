@@ -3,9 +3,9 @@ import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./NavHeader.scss";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import LibraryMusicOutlinedIcon from "@mui/icons-material/LibraryMusicOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 function NavHeader() {
      return (
@@ -13,17 +13,17 @@ function NavHeader() {
                <Nav>
                     <Nav.Item>
                          <Nav.Link as={Link} to="/">
-                              <HomeRoundedIcon className="nav-icon"></HomeRoundedIcon>
+                              <HomeOutlinedIcon className="nav-icon"></HomeOutlinedIcon>
                          </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                         <Nav.Link as={Link} to="/analytics">
-                              <QueryStatsRoundedIcon className="nav-icon"></QueryStatsRoundedIcon>
+                         <Nav.Link as={Link} to="/music">
+                              <LibraryMusicOutlinedIcon className="nav-icon"></LibraryMusicOutlinedIcon>
                          </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                          <Nav.Link as={Link} to="/settings">
-                              <SettingsRoundedIcon className="nav-icon"></SettingsRoundedIcon>
+                              <SettingsOutlinedIcon className="nav-icon"></SettingsOutlinedIcon>
                          </Nav.Link>
                     </Nav.Item>
                </Nav>
