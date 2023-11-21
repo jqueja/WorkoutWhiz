@@ -2,6 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Container from "@material-ui/core/Container";
+import "./WorkoutCard.scss";
 
 // Create content in card
 function CardTable(props) {
@@ -37,10 +38,18 @@ function WorkoutCard(props) {
                               <Table>
                                    <thead>
                                         <tr>
-                                             <th>Workout</th>
-                                             <th>Weight</th>
-                                             <th>Sets</th>
-                                             <th>Reps</th>
+                                             <th style={{ width: "40%" }}>
+                                                  Workout
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Weight
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Sets
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Reps
+                                             </th>
                                         </tr>
                                    </thead>
 
