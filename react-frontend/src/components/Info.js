@@ -3,6 +3,7 @@ import "./Info.scss"; // Import your CSS file
 import { useNavigate } from "react-router-dom";
 
 function Info() {
+     const navigate = useNavigate();
      const [formData, setFormData] = useState({
           weight: "",
           height: "",
@@ -31,13 +32,31 @@ function Info() {
           }
      };
 
-     const navigate = useNavigate();
-
-     const handleSubmit = (e) => {
+     const handleSubmit = async (e) => {
           e.preventDefault();
-          // Handle form submission logic here
-          console.log("Form data submitted:", formData);
-          navigate("/successul-signup");
+
+          try {
+               const response = await fetch("http://localhost:3000/signup", {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+               });
+
+               if (response.ok) {
+                    console.log("Form data submitted successfully");
+                    navigate("/successful-signup");
+               } else {
+                    // Handle error response
+                    console.error(
+                         "Error submitting form data:",
+                         response.statusText
+                    );
+               }
+          } catch (error) {
+               console.error("Error submitting form data:", error.message);
+          }
      };
 
      return (
