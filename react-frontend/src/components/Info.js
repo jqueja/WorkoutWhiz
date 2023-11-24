@@ -49,12 +49,14 @@ function Info() {
                     navigate("/successful-signup");
                } else {
                     // Handle error response
+                    console.log(JSON.stringify(formData));
                     console.error(
                          "Error submitting form data:",
                          response.statusText
                     );
                }
           } catch (error) {
+               console.log(JSON.stringify(formData));
                console.error("Error submitting form data:", error.message);
           }
      };
