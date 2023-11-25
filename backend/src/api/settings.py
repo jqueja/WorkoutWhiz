@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException, status
 from pydantic import BaseModel
 import sqlalchemy
 from src import database as db
@@ -17,16 +17,22 @@ class UserSettings(BaseModel):
     weight: str
     height_ft: str
 
-@router.get("/")
-def settings_info():
+
+@router.get("/{user_id}")
+def settings_info(user_id: int):
     with db.engine.begin() as connection:
         result = connection.execute(sqlalchemy.text(
             """
             SELECT user_id, first_name, last_name, weight, age, gender, dob, height
             FROM users
+            WHERE user_id = :user_id
             """
-        )).first()
-    
+        ), {"user_id": user_id}).first()
+
+    if result is None:
+        # Raise an HTTPException with a 404 status code and an error message
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
     return {
         "user_id": result.user_id, 
         "first_name": result.first_name,
@@ -37,3 +43,4 @@ def settings_info():
         "dob": result.dob,
         "height": result.height
     }
+
