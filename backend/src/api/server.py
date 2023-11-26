@@ -23,7 +23,7 @@ app = FastAPI(
 
 app.include_router(settings.router)
 #app.include_router(login.router)
-#app.include_router(signup.router)
+app.include_router(signup.router)
 #app.include_router(info.router)
 #app.include_router(workouts.router)
 
