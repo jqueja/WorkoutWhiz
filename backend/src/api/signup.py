@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException, status
 from sqlalchemy import create_engine, text
+from fastapi.responses import JSONResponse
 
 import sqlalchemy
 
@@ -38,4 +39,6 @@ def create_user(user_email: str, user_password: str, first_name: str, last_name:
             {"user_id": user_id, "first_name": first_name, "last_name": last_name, "user_email": user_email}
         )
 
-    return "OK"
+     # Return a JSON response with user details
+    user_details = {"user_id": user_id, "user_email": user_email, "first_name": first_name, "last_name": last_name}
+    return JSONResponse(content=user_details, status_code=200)
