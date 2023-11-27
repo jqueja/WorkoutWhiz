@@ -23,7 +23,7 @@ router = APIRouter(
 
 
 @router.post("/create-user")
-def create_user(user_email: str, user_password: str, first_name: str, last_name: str):
+async def create_user(user_email: str, user_password: str, first_name: str, last_name: str):
 
     new_user = supabase.auth.sign_up({ "email": user_email, "password": user_password })
 
