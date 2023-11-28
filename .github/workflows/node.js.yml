@@ -4,21 +4,22 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main" ]
+     push:
+          branches: ["main"]
 
 jobs:
-  build:
+     build:
+          runs-on: ubuntu-latest
+          defaults:
+               run:
+                    working-directory: ./react-frontend
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-    - run: npm ci
-    - run: npm run -w react-frontend lint
-    - run: npm run -w react-frontend build
-
+          steps:
+               - uses: actions/checkout@v3
+               - name: Use Node.js 20
+                 uses: actions/setup-node@v3
+                 with:
+                      node-version: 20
+               - run: npm ci
+               - run: npm run -w react-frontend lint
+               - run: npm run -w react-frontend build
