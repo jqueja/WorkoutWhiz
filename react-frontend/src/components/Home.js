@@ -41,6 +41,7 @@ function Home() {
      }, []); // Run once when the component mounts
 
      const handleLogWorkoutSubmit = async (newWorkoutData) => {
+          console.log(newWorkoutData);
           try {
                const response = await fetch(
                     `http://127.0.0.1:8000/workouts/${userId}/update`,
@@ -55,6 +56,8 @@ function Home() {
                );
 
                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Error updating workout:", errorData);
                     throw new Error(
                          `Error updating workout: ${response.statusText}`
                     );

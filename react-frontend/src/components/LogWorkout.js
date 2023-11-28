@@ -36,18 +36,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
           // Build the new workout data object
           const newWorkoutData = {
                date: date,
-               workouts: [
-                    {
-                         workoutName: weightData.workoutName,
-                         weight: weightData.weight,
-                         reps: weightData.reps,
-                         sets: weightData.sets,
-                    },
-               ],
+               lift_name: weightData.workoutName, // match the field name
+               weight: weightData.weight.toString(), // convert to string
+               reps: weightData.reps.toString(), // convert to string
+               sets: weightData.sets.toString(), // convert to string
           };
 
           handleLogWorkoutSubmit(newWorkoutData);
           handleClose();
+          console.log(newWorkoutData);
      };
 
      return (

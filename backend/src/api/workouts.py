@@ -44,9 +44,9 @@ def display_workouts_info(user_id: int):
 class UserWorkouts(BaseModel):
     date: date
     lift_name: str
-    weight: int
-    sets: int
-    reps: int
+    weight: str
+    sets: str
+    reps: str
 
 @router.post("/{user_id}/update")
 def update_workouts_info(user_id: int, userWorkouts: UserWorkouts):
