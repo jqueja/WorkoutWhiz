@@ -1,5 +1,6 @@
 from fastapi import FastAPI, exceptions
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from src.api import settings, login, signup, info, workouts
 import json
@@ -21,12 +22,21 @@ app = FastAPI(
     },
 )
 
+# Enable CORS
+origins = ["http://localhost", "http://localhost:3000"]  # Add your frontend URL(s)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(settings.router)
 #app.include_router(login.router)
 app.include_router(signup.router)
 #app.include_router(info.router)
 #app.include_router(workouts.router)
-
 
 @app.exception_handler(exceptions.RequestValidationError)
 @app.exception_handler(ValidationError)
@@ -38,7 +48,6 @@ async def validation_exception_handler(request, exc):
         response['message'].append(f"{error['loc']}: {error['msg']}")
 
     return JSONResponse(response, status_code=422)
-
 
 @app.get("/")
 async def root():

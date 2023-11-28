@@ -1,10 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException, status
 from sqlalchemy import create_engine, text
-
 import sqlalchemy
-
 from src import database as db
-
 from dotenv import load_dotenv
 load_dotenv()
 
