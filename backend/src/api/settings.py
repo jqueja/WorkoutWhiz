@@ -57,7 +57,7 @@ def update_user_settings(
         )
 
         # Update the user settings
-        connection.execute(sqlalchemy.text(
+        result = connection.execute(sqlalchemy.text(
             f"""
             UPDATE users
             SET {set_clause}
@@ -66,4 +66,8 @@ def update_user_settings(
         ), {"user_id": user_id, **settings.dict()})
 
     # Optionally, you can return the updated user settings
-    return {"message": "User settings updated successfully"}
+    if result != None:
+        return {"message": "User settings updated successfully"}
+    else:
+        error_message = "Invalid updating of settings"
+        raise HTTPException(status_code=400, detail=error_message)
