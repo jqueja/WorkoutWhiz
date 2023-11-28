@@ -23,7 +23,7 @@ app = FastAPI(
 )
 
 # Enable CORS
-origins = ["http://localhost", "http://localhost:3000"]  # Add your frontend URL(s)
+origins = ["http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -33,10 +33,10 @@ app.add_middleware(
 )
 
 app.include_router(settings.router)
-#app.include_router(login.router)
+# app.include_router(login.router)
 app.include_router(signup.router)
-#app.include_router(info.router)
-#app.include_router(workouts.router)
+# app.include_router(info.router)
+# app.include_router(workouts.router)
 
 @app.exception_handler(exceptions.RequestValidationError)
 @app.exception_handler(ValidationError)

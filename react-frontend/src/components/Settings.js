@@ -32,9 +32,10 @@ function Settings() {
 
           try {
                const response = await fetch(
-                    `http://127.0.0.1:8000/settings/${userId}`,
+                    `http://127.0.0.1:8000/settings/update/${userId}`, // Ensure the URL matches the correct route
                     {
-                         method: "PUT",
+                         method: "POST",
+                         credentials: "include", // Include credentials in the request
                          headers: {
                               "Content-Type": "application/json",
                          },
