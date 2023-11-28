@@ -21,12 +21,11 @@ def display_workouts_info(user_id: int):
             """
         ), {"user_id": user_id}).fetchall()
 
-        print(result)
 
-
-    if result is None:
+    if result == []:
         # Raise an HTTPException with a 404 status code and an error message
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    print(result)
     
     final_array = []
     for exercise in result:
@@ -70,7 +69,7 @@ def update_workouts_info(user_id: int, userWorkouts: UserWorkouts):
             VALUES (:result_id, :lift_name, :weight, :sets, :reps)
             RETURNING wl_id
             """
-        ), {"result_id": result_id, "lift_name": userWorkouts.lift_name, "weight": userWorkouts.weight, "sets": userWorkouts.sets, "reps": userWorkouts.sets}).scalar()
+        ), {"result_id": result_id, "lift_name": userWorkouts.lift_name, "weight": userWorkouts.weight, "sets": userWorkouts.sets, "reps": userWorkouts.reps}).scalar()
 
         if result_workout is None:
         # Raise an HTTPException with a 404 status code and an error message

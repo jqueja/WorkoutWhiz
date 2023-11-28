@@ -1,61 +1,84 @@
 import React, { useState, useEffect } from "react";
-import WorkoutCard from "./WorkoutCard.js";
-import LogWorkout from "./LogWorkout.js";
+import WorkoutCard from "./WorkoutCard";
+import LogWorkout from "./LogWorkout";
 import Container from "@material-ui/core/Container";
+import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
 
 function Home() {
-     // Access local storage for list of date-workout objects
-     const [data, setData] = useState({ ...localStorage });
+     const [workoutData, setWorkoutData] = useState([]);
+     const { userId } = useUser();
 
-     // update data after submit
-     const handleLogWorkoutSubmit = () => {
-          setData({ ...localStorage });
+     const fetchWorkouts = async () => {
+          try {
+               const response = await fetch(
+                    `http://127.0.0.1:8000/workouts/${userId}`,
+                    {
+                         method: "GET",
+                         credentials: "include",
+                         headers: {
+                              Accept: "application/json",
+                         },
+                    }
+               );
+
+               if (!response.ok) {
+                    throw new Error(
+                         `Error fetching workouts: ${response.statusText}`
+                    );
+               }
+
+               const data = await response.json();
+               console.log(data);
+               setWorkoutData(data);
+          } catch (error) {
+               console.error(error);
+          }
      };
 
-     // update data array after data is modified
      useEffect(() => {
-          var result = [];
-          for (var i in data) {
-               try {
-                    result.push([i.toString(), JSON.parse(data[i])]); // make into array to map
-               } catch {
-                    continue;
-               }
-          }
-     }, [data]);
+          fetchWorkouts();
+     }, []); // Run once when the component mounts
 
-     // format data array in order to map data into components
-     var result = [];
-     for (var i in data) {
+     const handleLogWorkoutSubmit = async (newWorkoutData) => {
           try {
-               result.push([i, JSON.parse(data[i])]);
-          } catch {
-               continue;
-          }
-     }
-     // order by descending date
-     result.sort(function (a, b) {
-          return b[0].localeCompare(a[0]);
-     });
+               const response = await fetch(
+                    `http://127.0.0.1:8000/workouts/${userId}/update`,
+                    {
+                         method: "POST",
+                         credentials: "include",
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify(newWorkoutData),
+                    }
+               );
 
-     // create workout cards
-     const workoutCardList = result.map((card) => {
-          return (
-               <WorkoutCard
-                    key={card[0]}
-                    date={card[0]}
-                    item={card[1]}
-               ></WorkoutCard>
-          );
-     });
+               if (!response.ok) {
+                    throw new Error(
+                         `Error updating workout: ${response.statusText}`
+                    );
+               }
+
+               console.log("Workout updated successfully");
+               fetchWorkouts();
+          } catch (error) {
+               console.error(error);
+          }
+     };
+
+     const workoutCardList = workoutData.map((card) => (
+          <WorkoutCard
+               key={card.date}
+               date={card.date}
+               item={card} // Pass the entire object to WorkoutCard
+          ></WorkoutCard>
+     ));
 
      return (
           <motion.div
                initial={{ translateX: "-100%" }}
-               animate={{
-                    translateX: 0,
-               }}
+               animate={{ translateX: 0 }}
           >
                <Container
                     className="page-header"
