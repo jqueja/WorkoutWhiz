@@ -23,15 +23,18 @@ function Music() {
                <Container
                     className="page-header"
                     style={{
+                         alignContent: "center",
                          display: "flex",
-                         justifyContent: "space-between",
+                         alignItems: "center",
+                         justifyCntent: "center",
+                         flexDirection: "column",
                     }}
                >
                     {" "}
                     <iframe
-                         style={{ borderRadius: "12px" }}
+                         style={{ borderRadius: "12px", marginBottom: "1rem" }}
                          src="https://open.spotify.com/embed/playlist/4jwOXOlk6eUe3Oh2B515mZ?utm_source=generator&theme=0"
-                         width="100%"
+                         width="90%"
                          height="500"
                          frameBorder="0"
                          allowfullscreen=""
