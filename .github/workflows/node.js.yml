@@ -20,6 +20,6 @@ jobs:
                  uses: actions/setup-node@v3
                  with:
                       node-version: 20
-               - run: npm ci
+               - run: npm ci --legacy-peer-deps
                - run: npm run -w react-frontend lint
                - run: npm run -w react-frontend build
