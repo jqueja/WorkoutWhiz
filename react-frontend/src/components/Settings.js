@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
-import supabase from "./Supabase";
+import supabase from "./Supabase.js";
 import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
 
@@ -31,47 +31,60 @@ function Settings() {
                }, {});
 
           try {
-               const { data, error } = await supabase
-                    .from("users")
-                    .update(nonEmptySettings)
-                    .eq("user_id", userId);
+               const response = await fetch(
+                    `http://127.0.0.1:8000/settings/update/${userId}`, // Ensure the URL matches the correct route
+                    {
+                         method: "POST",
+                         credentials: "include", // Include credentials in the request
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify(nonEmptySettings),
+                    }
+               );
 
-               if (error) {
-                    console.error("Error updating Supabase data:", error);
+               if (!response.ok) {
+                    console.error(
+                         "Error updating user settings:",
+                         response.statusText
+                    );
                } else {
-                    console.log("Supabase data updated successfully:", data);
+                    console.log("User settings updated successfully");
+                    // You might want to fetch the updated settings again after a successful update
+                    fetchUserSettings();
                }
-
-               setUserSettings((prevSettings) => ({
-                    ...prevSettings,
-                    ...nonEmptySettings,
-               }));
           } catch (error) {
-               console.error("Error updating Supabase data:", error.message);
+               console.error("Error updating user settings:", error.message);
+          }
+     };
+
+     const fetchUserSettings = async () => {
+          try {
+               const response = await fetch(
+                    `http://127.0.0.1:8000/settings/${userId}`,
+                    {
+                         method: "GET",
+                         credentials: "include", // Include credentials in the request
+                         headers: {
+                              Accept: "application/json",
+                         },
+                    }
+               );
+               if (!response.ok) {
+                    console.error(
+                         "Error fetching user settings:",
+                         response.statusText
+                    );
+               } else {
+                    const data = await response.json();
+                    setUserSettings(data);
+               }
+          } catch (error) {
+               console.error("Error fetching user settings:", error.message);
           }
      };
 
      useEffect(() => {
-          const fetchUserSettings = async () => {
-               try {
-                    const { data, error } = await supabase
-                         .from("users")
-                         .select("*")
-                         .eq("user_id", userId);
-
-                    console.log("Data:", data); // Log data
-                    console.log("Error:", error); // Log error
-
-                    if (error) {
-                         console.error("Error fetching user data:", error);
-                    } else {
-                         setUserSettings(data[0] || {});
-                    }
-               } catch (error) {
-                    console.error("Error fetching user data:", error.message);
-               }
-          };
-
           fetchUserSettings();
      }, [userId]);
 

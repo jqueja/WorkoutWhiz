@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Request, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import sqlalchemy
 from src import database as db
+from datetime import date
 
 router = APIRouter(
     prefix="/settings",
@@ -9,14 +11,13 @@ router = APIRouter(
 )
 
 class UserSettings(BaseModel):
-    first_name: str
-    last_name: str
-    dob: str
-    age: str
-    gender: str
-    weight: str
-    height_ft: str
-
+    first_name: str = None
+    last_name: str = None
+    dob: str = None
+    age: str = None
+    gender: str = None
+    weight: str = None
+    height_ft: str = None
 
 @router.get("/{user_id}")
 def settings_info(user_id: int):
@@ -44,3 +45,29 @@ def settings_info(user_id: int):
         "height": result.height
     }
 
+@router.post("/update/{user_id}")
+def update_user_settings(
+    user_id: int, 
+    settings: UserSettings
+):
+    with db.engine.begin() as connection:
+        # Build the SET clause based on provided fields
+        set_clause = ", ".join(
+            f"{field} = :{field}" for field, value in settings.dict().items() if value is not None
+        )
+
+        # Update the user settings
+        result = connection.execute(sqlalchemy.text(
+            f"""
+            UPDATE users
+            SET {set_clause}
+            WHERE user_id = :user_id
+            """
+        ), {"user_id": user_id, **settings.dict()})
+
+    # Optionally, you can return the updated user settings
+    if result != None:
+        return {"message": "User settings updated successfully"}
+    else:
+        error_message = "Invalid updating of settings"
+        raise HTTPException(status_code=400, detail=error_message)
