@@ -37,8 +37,8 @@ function EditSettings({ onUpdate, ...props }) {
                          height: "3rem",
                          width: "3rem",
                          padding: "0rem",
-                         background: "#7AE2E9",
-                         borderColor: "#7AE2E9",
+                         background: "#F65858",
+                         borderColor: "#F65858",
                     }}
                >
                     <EditRoundedIcon className="page-icon"></EditRoundedIcon>
@@ -89,11 +89,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Form.Group as={Col} controlId="formGender">
                                         <Form.Label>Gender</Form.Label>
                                         <Form.Select
-                                             defaultValue="Choose..."
+                                             value={gender}
                                              onChange={(e) =>
                                                   setGender(e.target.value)
                                              }
                                         >
+                                             <option>Select</option>
                                              <option value="Female">
                                                   Female
                                              </option>
@@ -156,11 +157,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Button
                                         type="submit"
                                         style={{
-                                             background: "#8286e5",
-                                             borderColor: "#8286e5",
+                                             background: "#F3A64B",
+                                             borderColor: "#F3A64B",
                                         }}
+                                        onClick={handleClose}
                                    >
-                                        Submit
+                                        Save
                                    </Button>
                               </div>
                          </Form>

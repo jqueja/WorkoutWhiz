@@ -2,10 +2,26 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Container from "@material-ui/core/Container";
+import "./WorkoutCard.scss";
 
-//import "./WorkoutCard.css";
+// Create content in card
+function CardTable(props) {
+     // map data into rows by workoutName
+     const rows = props.item.map((row, index) => {
+          return (
+               <tr key={index}>
+                    <td>{row.workoutName}</td>
+                    <td>{row.weight}</td>
+                    <td>{row.sets}</td>
+                    <td>{row.reps}</td>
+               </tr>
+          );
+     });
+     return rows;
+}
 
-function WorkoutCard() {
+function WorkoutCard(props) {
+     const date = props.date;
      return (
           <Container style={{ marginTop: "1rem" }}>
                <Card>
@@ -16,41 +32,31 @@ function WorkoutCard() {
                                    fontFamily: "M PLUS 1",
                               }}
                          >
-                              11/1/23 - Wed
+                              {date}
                          </Card.Title>
-                         <Card.Subtitle className="mb-2 text-muted">
-                              Workout #3
-                         </Card.Subtitle>
                          <Card.Text>
                               <Table>
                                    <thead>
                                         <tr>
-                                             <th>Workout</th>
-                                             <th>Weight</th>
-                                             <th>Sets</th>
-                                             <th>Reps</th>
+                                             <th style={{ width: "40%" }}>
+                                                  Workout
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Weight
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Sets
+                                             </th>
+                                             <th style={{ width: "10%" }}>
+                                                  Reps
+                                             </th>
                                         </tr>
                                    </thead>
 
                                    <tbody>
-                                        <tr>
-                                             <td>Glute Bridges</td>
-                                             <td>15</td>
-                                             <td>3</td>
-                                             <td>10</td>
-                                        </tr>
-                                        <tr>
-                                             <td>Romanian Deadlifts</td>
-                                             <td>20</td>
-                                             <td>3</td>
-                                             <td>10</td>
-                                        </tr>
-                                        <tr>
-                                             <td>Goblet Squats</td>
-                                             <td>10</td>
-                                             <td>3</td>
-                                             <td>8</td>
-                                        </tr>
+                                        <CardTable
+                                             item={props.item}
+                                        ></CardTable>
                                    </tbody>
                               </Table>
                          </Card.Text>

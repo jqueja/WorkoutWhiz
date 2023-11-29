@@ -2,8 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
-import supabase from "./supabase";
+import supabase from "./Supabase";
 import { useUser } from "../UserContext";
+import { motion } from "framer-motion";
 
 import "./Components.scss";
 
@@ -75,14 +76,17 @@ function Settings() {
      }, [userId]);
 
      return (
-          <div>
+          <motion.div
+               initial={{ translateX: "-100%" }}
+               animate={{
+                    translateX: 0,
+               }}
+          >
                <Container
+                    className="page-header"
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
-                         fontSize: "2rem",
-                         marginTop: "2rem",
-                         marginBottom: "1.5rem",
                     }}
                >
                     Settings
@@ -92,22 +96,22 @@ function Settings() {
                     />
                </Container>
                <Container>
-                    FirstName: {userSettings.first_name}
+                    First Name: {userSettings.first_name}
                     <br />
-                    LastName: {userSettings.last_name}
+                    Last Name: {userSettings.last_name}
                     <br />
-                    DOB: {userSettings.dob}
+                    Date of Birth: {userSettings.dob}
                     <br />
                     Age: {userSettings.age}
+                    <br />
+                    Gender: {userSettings.gender}
                     <br />
                     Weight: {userSettings.weight}
                     <br />
                     Height: {userSettings.height}
                     <br />
-                    Gender: {userSettings.gender}
-                    <br />
                </Container>
-          </div>
+          </motion.div>
      );
 }
 
