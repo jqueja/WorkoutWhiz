@@ -1,39 +1,50 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./SuccessfulSignup.scss"; // Import your CSS file
+import "./Login.scss"; // Import your CSS file
+import white_logo from "../images/WorkoutWhizLogo1White.png";
+import Image from "react-bootstrap/Image";
+import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 
 function SuccessfulSignup() {
+     const navigate = useNavigate();
      return (
-          <section className="vh-100 vw-100 gradient-custom">
-               <div className="container py-5 h-100">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
-                         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                              <div className="card bg-white text-dark full-screen-card">
-                                   <div className="card-body text-center">
-                                        <div className="mb-md-5 mt-md-4 pb-5">
-                                             <h2 className="fw-bold mb-2 text-uppercase">
-                                                  Successful Signup
-                                             </h2>
-                                             <p className="text-dark-50 mb-5">
-                                                  You have successfully signed
-                                                  up!
-                                             </p>
-
-                                             {/* Additional content for the successful signup page */}
-                                             {/* You can customize this section based on your needs */}
-
-                                             <Link to="/login">
-                                                  <button className="btn btn-outline-dark btn-lg px-5">
-                                                       Go to Login
-                                                  </button>
-                                             </Link>
-                                        </div>
+          <>
+               <section className="vh-100 gradient-custom-light">
+                    <div className="container py-5 h-100 center-items">
+                         <Image className="logo" src={white_logo} />
+                         <div
+                              className="card bg-light text-dark"
+                              style={{ borderRadius: "20px" }}
+                         >
+                              <div className="card-body text-center">
+                                   <div>
+                                        <h2 className="page-header">
+                                             Successful Signup
+                                        </h2>
+                                        <p
+                                             style={{
+                                                  display: "flex",
+                                                  justifyContent: "center",
+                                             }}
+                                        >
+                                             You have successfully signed up!
+                                        </p>
+                                        <Button
+                                             style={{
+                                                  background: "#F3A64B",
+                                                  borderColor: "#F3A64B",
+                                                  marginTop: "1.5rem",
+                                             }}
+                                             onClick={() => navigate("/login")}
+                                        >
+                                             Go to Login
+                                        </Button>
                                    </div>
                               </div>
                          </div>
                     </div>
-               </div>
-          </section>
+               </section>
+          </>
      );
 }
 

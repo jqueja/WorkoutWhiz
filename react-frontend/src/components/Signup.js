@@ -1,187 +1,202 @@
-import React, { useState } from "react";
-import "./Signup.scss"; // Import your CSS file
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import "./Login.scss"; // Import your CSS file
+import { Link, useNavigate } from "react-router-dom";
+import white_logo from "../images/WorkoutWhizLogo1White.png";
+import Image from "react-bootstrap/Image";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 
 function Signup() {
+     const [passwordMatchError, setPasswordMatchError] = useState("true");
+     const [validated, setValidated] = useState(false);
+
+     const navigate = useNavigate();
+
      const [formData, setFormData] = useState({
           firstName: "",
           lastName: "",
           email: "",
           password: "",
      });
-     const [passwordMatchError, setPasswordMatchError] = useState(false);
 
      const handleChange = (e) => {
-          const { name, value } = e.target;
-
-          // Handle special case for "Other" radio button
-          if (name === "gender" && value !== "other") {
-               // If the user switched to "Male" or "Female," reset the otherText field
-               setFormData((prevData) => ({
-                    ...prevData,
-                    gender: value,
-                    otherText: "",
-               }));
-          } else {
-               // For other fields or "Other" radio button selected, update the state
-               setFormData((prevData) => ({
-                    ...prevData,
-                    [name]: value,
-               }));
-          }
+          setFormData((formData) => ({
+               ...formData,
+               [e.target.name]: e.target.value,
+          }));
      };
 
-     const navigate = useNavigate();
+     useEffect(() => {
+          // Check if the password and confirm password match
+          if (formData.password === formData.confirmPassword) {
+               setPasswordMatchError(false);
+          } else {
+               setPasswordMatchError(true);
+          }
+          console.log(passwordMatchError);
+     }, [formData.confirmPassword, formData.password]);
 
      const handleSubmit = (e) => {
           e.preventDefault();
-          // Check if the password and confirm password match
-          if (formData.password !== formData.confirmPassword) {
+          if (formData.password === formData.confirmPassword) {
+               setPasswordMatchError(false);
+          } else {
                setPasswordMatchError(true);
-               return;
           }
-          // Handle form submission logic here
-          console.log("Form data submitted:", formData);
-          navigate("/info");
+
+          if (e.target.checkValidity() === false || passwordMatchError) {
+               e.preventDefault();
+               e.stopPropagation();
+          }
+
+          setValidated(true);
+          if (e.target.checkValidity() === true && !passwordMatchError) {
+               console.log("Form data submitted:", formData);
+               navigate("/info");
+          }
      };
 
      return (
-          <section className="vh-100 gradient-custom">
-               <div className="container py-5 h-100">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
-                         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                              <div className="card bg-light text-dark">
-                                   <div className="card-body text-center">
-                                        <div className="mb-md-5 mt-md-4 pb-5">
-                                             <h2 className="fw-bold mb-2 text-uppercase">
-                                                  Sign Up
-                                             </h2>
-                                             <p className="text-white-50 mb-5">
-                                                  Please enter your information:
-                                             </p>
+          <section className="vh-100 gradient-custom-light">
+               <div className="container py-5 h-100 center-items">
+                    <Image className="logo" src={white_logo} />
+                    <div
+                         className="card bg-light text-dark"
+                         style={{ borderRadius: "20px" }}
+                    >
+                         <div className="card-body text-center">
+                              <div>
+                                   <h2 className="page-header">Sign Up</h2>
 
-                                             <form onSubmit={handleSubmit}>
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="text"
-                                                            id="firstName"
-                                                            name="firstName"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.firstName
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="firstName"
-                                                       >
-                                                            First Name
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="text"
-                                                            id="lastName"
-                                                            name="lastName"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.lastName
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="lastName"
-                                                       >
-                                                            Last Name
-                                                       </label>
-                                                  </div>
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="text"
-                                                            id="email"
-                                                            name="email"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.email
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="email"
-                                                       >
-                                                            Email
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="text"
-                                                            id="password"
-                                                            name="password"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.password
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="password"
-                                                       >
-                                                            Password
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="text"
-                                                            id="confirmPassword"
-                                                            name="confirmPassword"
-                                                            className={`form-control form-control-lg ${
-                                                                 passwordMatchError
-                                                                      ? "is-invalid"
-                                                                      : ""
-                                                            }`}
-                                                            value={
-                                                                 formData.confirmPassword
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="confirmPassword"
-                                                       >
-                                                            Confirm Password
-                                                       </label>
-                                                       {passwordMatchError && (
-                                                            <div className="invalid-feedback">
-                                                                 Passwords do
-                                                                 not match.
-                                                            </div>
-                                                       )}
-                                                  </div>
-                                                  <button
-                                                       className="btn btn-outline-dark btn-lg px-5"
-                                                       type="submit"
-                                                  >
-                                                       Submit
-                                                  </button>
-                                             </form>
+                                   <Form
+                                        noValidate
+                                        validated={validated}
+                                        onSubmit={handleSubmit}
+                                   >
+                                        <Row className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="firstName"
+                                             >
+                                                  <Form.Label>
+                                                       First Name
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       name="firstName"
+                                                       value={
+                                                            formData.firstName
+                                                       }
+                                                       onChange={handleChange}
+                                                       required
+                                                  />
+                                             </Form.Group>
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="lastName"
+                                             >
+                                                  <Form.Label>
+                                                       Last Name
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       name="lastName"
+                                                       value={formData.lastName}
+                                                       onChange={handleChange}
+                                                       required
+                                                  />
+                                             </Form.Group>
+                                        </Row>
+                                        <div className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="email"
+                                             >
+                                                  <Form.Label>Email</Form.Label>
+                                                  <Form.Control
+                                                       name="email"
+                                                       value={formData.email}
+                                                       onChange={handleChange}
+                                                       required
+                                                  />
+                                             </Form.Group>
                                         </div>
+
+                                        <div className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="password"
+                                             >
+                                                  <Form.Label>
+                                                       Password
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       name="password"
+                                                       value={formData.password}
+                                                       onChange={handleChange}
+                                                       required
+                                                  />
+                                             </Form.Group>
+                                        </div>
+
+                                        <div className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="confirmPassword"
+                                             >
+                                                  <Form.Label>
+                                                       Confirm Password
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       name="confirmPassword"
+                                                       value={
+                                                            formData.confirmPassword
+                                                       }
+                                                       onChange={handleChange}
+                                                       // isValid={
+                                                       //      !passwordMatchError
+                                                       // }
+                                                       isInvalid={
+                                                            !!passwordMatchError
+                                                       }
+                                                       // isValid={false}
+                                                       required
+                                                  />
+                                                  {passwordMatchError ? (
+                                                       <Form.Control.Feedback type="invalid">
+                                                            Passwords do not
+                                                            match.
+                                                       </Form.Control.Feedback>
+                                                  ) : (
+                                                       ""
+                                                  )}
+                                             </Form.Group>
+                                        </div>
+                                        <Button
+                                             type="submit"
+                                             style={{
+                                                  background: "#F3A64B",
+                                                  borderColor: "#F3A64B",
+                                                  margin: "1.5rem",
+                                             }}
+                                             disabled={
+                                                  passwordMatchError &&
+                                                  !validated
+                                             }
+                                        >
+                                             Sign Up
+                                        </Button>
+                                   </Form>
+                                   <div>
+                                        <p className="mb-0">
+                                             Back to{" "}
+                                             <Link
+                                                  to="/login"
+                                                  className="text-black-50 fw-bold"
+                                             >
+                                                  Login
+                                             </Link>
+                                        </p>
                                    </div>
                               </div>
                          </div>
