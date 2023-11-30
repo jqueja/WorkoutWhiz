@@ -39,22 +39,26 @@ function Info() {
      const handleSubmit = async (e) => {
           e.preventDefault();
 
-          const formattedUserId = `"${userId}"`;
-
-          // Convert weight, height, and age to numbers
-          const weight = parseInt(formData.weight);
-          const height = parseInt(formData.height);
-          const age = parseInt(formData.age);
+          const formattedUserId = `"${userId}"`.replace(/"/g, "");
 
           // Log the request body before sending the request
-          console.log("Request Body:", {
-               user_id: formattedUserId,
+
+          // Convert weight, height, and age to numbers
+          const weight = parseInt(formData.weight, 10);
+          const height = parseInt(formData.height, 10);
+          const age = parseInt(formData.age, 10);
+
+          // Log the request body before sending the request
+          const requestBody = {
+               id: formattedUserId,
                weight: weight,
                height: height,
                age: age,
                gender: formData.gender,
                dob: formData.dob,
-          });
+          };
+
+          console.log("Request Body:", requestBody);
 
           try {
                const response = await fetch(
@@ -66,9 +70,9 @@ function Info() {
                          },
                          body: JSON.stringify({
                               id: formattedUserId,
-                              weight: weight,
-                              height: height,
-                              age: age,
+                              weight: parseInt(formData.weight, 10), // Corrected the typo
+                              height: parseInt(formData.height, 10), // Convert height to an integer
+                              age: parseInt(formData.age, 10), // Convert age to an integer
                               gender: formData.gender,
                               dob: formData.dob,
                          }),
