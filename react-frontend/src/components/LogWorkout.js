@@ -94,7 +94,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
                               >
-                                   <Form.Label>Select Exercise Type</Form.Label>
+                                   {/* <Form.Label>Select Exercise Type</Form.Label>
 
                                    <Form.Select
                                         name="exercise"
@@ -113,7 +113,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
-                              >
+                              > */}
                                    <Form.Label>
                                         {weightData.exercise === "distance"
                                              ? "Distance Activity Name"

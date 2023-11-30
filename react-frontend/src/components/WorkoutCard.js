@@ -8,7 +8,13 @@ function WorkoutCard(props) {
      const date = props.date;
 
      return (
-          <Container style={{ marginTop: "1rem" }}>
+          <Container
+               style={{
+                    marginTop: "1rem",
+                    paddingLeft: "0px",
+                    paddingRight: "0px",
+               }}
+          >
                <Card>
                     <Card.Body style={{ padding: "0.4rem" }}>
                          <Card.Title
@@ -22,10 +28,10 @@ function WorkoutCard(props) {
                          <Table>
                               <thead>
                                    <tr>
-                                        <th style={{ width: "40%" }}>
+                                        <th style={{ width: "35%" }}>
                                              Exercise
                                         </th>
-                                        <th style={{ width: "10%" }}>Weight</th>
+                                        <th style={{ width: "15%" }}>Weight</th>
                                         <th style={{ width: "10%" }}>Sets</th>
                                         <th style={{ width: "10%" }}>Reps</th>
                                    </tr>

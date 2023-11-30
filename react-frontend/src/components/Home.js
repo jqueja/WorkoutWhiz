@@ -86,6 +86,8 @@ function Home() {
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
+                         paddingLeft: "0px",
+                         paddingRight: "0px",
                     }}
                >
                     My Workout Log
