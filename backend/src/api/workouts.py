@@ -25,7 +25,6 @@ def display_workouts_info(user_id: int):
     if result == []:
         # Raise an HTTPException with a 404 status code and an error message
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    print(result)
     
     final_array = []
     for exercise in result:
@@ -38,7 +37,6 @@ def display_workouts_info(user_id: int):
                 "reps": exercise.reps
             }
         )
-    print(final_array)
     return final_array
 
 class UserWorkouts(BaseModel):

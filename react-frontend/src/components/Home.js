@@ -29,7 +29,6 @@ function Home() {
                }
 
                const data = await response.json();
-               console.log(data);
                setWorkoutData(data);
           } catch (error) {
                console.error(error);
@@ -41,7 +40,6 @@ function Home() {
      }, []); // Run once when the component mounts
 
      const handleLogWorkoutSubmit = async (newWorkoutData) => {
-          console.log(newWorkoutData);
           try {
                const response = await fetch(
                     `http://127.0.0.1:8000/workouts/${userId}/update`,
