@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import "./Components.scss";
 
 function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
@@ -14,6 +13,10 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      const [show, setShow] = useState(false);
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
+
+     // verification states
+     const [validated, setValidated] = useState(false);
+     const [errors, setErrors] = useState({});
 
      // Workout Data states
      const [date, setDate] = useState("");
@@ -43,36 +46,62 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      }
 
      const updateField = (e) => {
-          // update weight info
-          setWeightData((weightData) => ({
-               ...weightData,
-               [e.target.name]: e.target.value,
+          const { name, value } = e.target;
+
+          // Validate the field and update the errors state
+          let fieldErrors = { ...errors };
+          switch (name) {
+               case "date":
+                    fieldErrors.date = value ? "" : "Please provide a date.";
+                    break;
+               case "exercise":
+                    fieldErrors.exercise = value
+                         ? ""
+                         : "Please provide a type of exercise.";
+                    break;
+               case "workoutName":
+                    fieldErrors.workoutName = value
+                         ? ""
+                         : "Please provide workout name.";
+                    break;
+               // Add validation for other fields if needed
+               default:
+                    break;
+          }
+
+          // Update the errors state
+          setErrors(fieldErrors);
+
+          // Update weight info
+          setWeightData((prevWeightData) => ({
+               ...prevWeightData,
+               [name]: value,
           }));
      };
 
      const handleSubmit = (e) => {
-          //const form = event.currentTarget;
-          // if (form.checkValidity() === false) {
-          //      event.preventDefault();
-          //      event.stopPropagation();
-          // }
-          //setValidated(true);
+          const form = e.currentTarget;
+          if (form.checkValidity() === false) {
+               e.preventDefault();
+               e.stopPropagation();
+               setValidated(true); // Show validation errors
+          } else {
+               setValidated(false);
+               // set data object
+               setData({
+                    weightlifting: weightData,
+               });
 
-          e.preventDefault();
-          // set data object
-          setData({
-               weightlifting: weightData,
-          });
+               // save data object
+               setSaveData({
+                    date: date,
+                    data: data,
+               });
+               useWorkoutLocalStorage(date, weightData);
 
-          // save data object
-          setSaveData({
-               date: date,
-               data: data,
-          });
-          useWorkoutLocalStorage(date, weightData);
-
-          handleLogWorkoutSubmit();
-          handleClose();
+               handleLogWorkoutSubmit();
+               handleClose();
+          }
      };
 
      return (
@@ -105,9 +134,17 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                     <Offcanvas.Body style={{ paddingTop: "8px" }}>
                          <Form
                               noValidate
-                              // validated={validated}
+                              validated={validated}
                               onSubmit={handleSubmit}
                          >
+                              {/* Alert for displaying validation errors */}
+                              {validated && (
+                                   <Alert variant="danger">
+                                        Please fix the validation errors before
+                                        submitting.
+                                   </Alert>
+                              )}
+
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
@@ -119,14 +156,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                         onChange={(e) =>
                                              setDate(e.target.value)
                                         }
-                                        //isInvalid={!!errors.date}
+                                        isInvalid={!!errors.date}
+                                        required
                                    />
-                                   {/* <Form.Control.Feedback type='invalid'>
+                                   <Form.Control.Feedback type="invalid">
                                         {errors.date}
-                                   </Form.Control.Feedback> */}
+                                   </Form.Control.Feedback>
                               </Form.Group>
 
-                              <Form.Group
+                              {/* <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
                               >
@@ -144,24 +182,33 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              Distance
                                         </option>
                                    </Form.Select>
-                              </Form.Group>
+                                   <Form.Control.Feedback type="invalid">
+                                        {errors.exercise}
+                                   </Form.Control.Feedback>
+                              </Form.Group> */}
+
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
                               >
                                    <Form.Label>
-                                        {" "}
                                         {data.exercise === "distance"
                                              ? "Distance Activity Name"
-                                             : "Weightlifiting Exercise Name"}
+                                             : "Weightlifting Exercise Name"}
                                    </Form.Label>
                                    <Form.Control
                                         name="workoutName"
+                                        type="text"
                                         value={weightData.workoutName}
                                         onChange={updateField}
+                                        required
                                    />
+                                   <Form.Control.Feedback type="invalid">
+                                        {errors.workoutName}
+                                   </Form.Control.Feedback>
                               </Form.Group>
-                              {data.exercise !== "distance" ? (
+
+                              {data.exercise !== "distance" && (
                                    <Row>
                                         <Form.Group
                                              style={{ marginBottom: "2rem" }}
@@ -174,9 +221,18 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              <Form.Control
                                                   placeholder="lbs"
                                                   name="weight"
+                                                  type="number"
+                                                  min="0"
                                                   value={weightData.weight}
                                                   onChange={updateField}
+                                                  required={
+                                                       data.exercise !==
+                                                       "distance"
+                                                  }
                                              />
+                                             <Form.Control.Feedback type="invalid">
+                                                  {errors.weight}
+                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group
                                              style={{ marginBottom: "2rem" }}
@@ -188,9 +244,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              </Form.Label>
                                              <Form.Control
                                                   name="sets"
+                                                  type="number"
+                                                  min="0"
                                                   value={weightData.sets}
                                                   onChange={updateField}
+                                                  required
                                              />
+                                             <Form.Control.Feedback type="invalid">
+                                                  {errors.sets}
+                                             </Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group
                                              style={{ marginBottom: "2rem" }}
@@ -202,13 +264,17 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              </Form.Label>
                                              <Form.Control
                                                   name="reps"
+                                                  type="number"
+                                                  min="0"
                                                   value={weightData.reps}
                                                   onChange={updateField}
+                                                  required
                                              />
+                                             <Form.Control.Feedback type="invalid">
+                                                  {errors.reps}
+                                             </Form.Control.Feedback>
                                         </Form.Group>
                                    </Row>
-                              ) : (
-                                   ""
                               )}
 
                               <div
@@ -233,4 +299,5 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
           </>
      );
 }
+
 export default LogWorkout;

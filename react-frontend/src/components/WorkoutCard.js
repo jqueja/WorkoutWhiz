@@ -6,6 +6,12 @@ import "./WorkoutCard.scss";
 
 // Create content in card
 function CardTable(props) {
+     console.log(props.item);
+     // Check if props.item is an array
+     if (!Array.isArray(props.item)) {
+          console.error("props.item is not an array:", props.item);
+          return null; // or handle it in some way that makes sense for your application
+     }
      // map data into rows by workoutName
      const rows = props.item.map((row, index) => {
           return (
