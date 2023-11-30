@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import "./Info.scss"; // Import your CSS file
+import "./LogSignIn.scss";
 import { useNavigate } from "react-router-dom";
+import white_logo from "../images/WorkoutWhizLogo1White.png";
+import Image from "react-bootstrap/Image";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 function Info() {
+     const [validated, setValidated] = useState(false);
+     const [enableButton, setEnableButton] = useState(false);
+
      const navigate = useNavigate();
      const [formData, setFormData] = useState({
           weight: "",
@@ -13,253 +22,195 @@ function Info() {
           dob: "",
      });
      const handleChange = (e) => {
-          const { name, value } = e.target;
+          setFormData((formData) => ({
+               ...formData,
+               [e.target.name]: e.target.value,
+          }));
 
-          // Handle special case for "Other" radio button
-          if (name === "gender" && value !== "other") {
-               // If the user switched to "Male" or "Female," reset the otherText field
-               setFormData((prevData) => ({
-                    ...prevData,
-                    gender: value,
-                    otherText: "",
-               }));
-          } else {
-               // For other fields or "Other" radio button selected, update the state
-               setFormData((prevData) => ({
-                    ...prevData,
-                    [name]: value,
-               }));
+          if (e.target.checkValidity() === true) {
+               setEnableButton(true);
           }
      };
 
      const handleSubmit = async (e) => {
           e.preventDefault();
+          if (e.target.checkValidity() === false) {
+               e.preventDefault();
+               e.stopPropagation();
+          }
 
-          try {
-               const response = await fetch("http://localhost:3000/signup", {
-                    method: "POST",
-                    headers: {
-                         "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-               });
-
-               if (response.ok) {
-                    console.log("Form data submitted successfully");
-                    navigate("/successful-signup");
-               } else {
-                    // Handle error response
-                    console.log(JSON.stringify(formData));
-                    console.error(
-                         "Error submitting form data:",
-                         response.statusText
+          setValidated(true);
+          if (e.target.checkValidity() === true) {
+               try {
+                    const response = await fetch(
+                         "http://localhost:3000/signup",
+                         {
+                              method: "POST",
+                              headers: {
+                                   "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify(formData),
+                         }
                     );
+
+                    if (response.ok) {
+                         console.log("Form data submitted successfully");
+                         navigate("/successful-signup");
+                    } else {
+                         // Handle error response
+                         console.log(JSON.stringify(formData));
+                         console.error(
+                              "Error submitting form data:",
+                              response.statusText
+                         );
+                    }
+               } catch (error) {
+                    console.log(JSON.stringify(formData));
+                    console.error("Error submitting form data:", error.message);
                }
-          } catch (error) {
-               console.log(JSON.stringify(formData));
-               console.error("Error submitting form data:", error.message);
           }
      };
 
      return (
-          <section className="vh-100 gradient-custom">
-               <div className="container py-5 h-100">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
-                         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                              <div className="card bg-light text-dark">
-                                   <div className="card-body text-center">
-                                        <div className="mb-md-5 mt-md-4 pb-5">
-                                             <h2 className="fw-bold mb-2 text-uppercase">
-                                                  Info
-                                             </h2>
-                                             <p className="text-white-50 mb-5">
-                                                  Please enter your information:
-                                             </p>
+          <section className="vh-100 gradient-custom-light">
+               <div className="container py-5 h-100 center-items">
+                    <Image className="logo" src={white_logo} />
+                    <div
+                         className="card bg-light text-dark"
+                         style={{ borderRadius: "20px" }}
+                    >
+                         <div className="card-body text-center">
+                              <div>
+                                   <h2 className="page-header">
+                                        Basic Information
+                                   </h2>
+                                   <p
+                                        style={{
+                                             display: "flex",
+                                             justifyContent: "flex-start",
+                                        }}
+                                   >
+                                        Please enter your information:
+                                   </p>
 
-                                             <form onSubmit={handleSubmit}>
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="number"
-                                                            id="weight"
-                                                            name="weight"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.weight
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="weight"
-                                                       >
-                                                            Weight
-                                                       </label>
-                                                  </div>
+                                   <Form
+                                        noValidate
+                                        validated={validated}
+                                        onSubmit={handleSubmit}
+                                   >
+                                        <Row className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="dob"
+                                             >
+                                                  <Form.Label>
+                                                       Birthday
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       name="dob"
+                                                       type="date"
+                                                       value={formData.dob}
+                                                       onChange={handleChange}
+                                                       required
+                                                  />{" "}
+                                             </Form.Group>
 
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="number"
-                                                            id="height"
-                                                            name="height"
-                                                            className="form-control form-control-lg"
-                                                            value={
-                                                                 formData.height
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="height"
-                                                       >
-                                                            Height
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="number"
-                                                            id="age"
-                                                            name="age"
-                                                            className="form-control form-control-lg"
-                                                            value={formData.age}
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="age"
-                                                       >
-                                                            Age
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-check form-check-inline mb-4">
-                                                       <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            name="gender"
-                                                            id="male"
-                                                            value="male"
-                                                            checked={
-                                                                 formData.gender ===
-                                                                 "male"
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-check-label"
-                                                            htmlFor="male"
-                                                       >
-                                                            Male
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-check form-check-inline mb-4">
-                                                       <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            name="gender"
-                                                            id="female"
-                                                            value="female"
-                                                            checked={
-                                                                 formData.gender ===
-                                                                 "female"
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-check-label"
-                                                            htmlFor="female"
-                                                       >
-                                                            Female
-                                                       </label>
-                                                  </div>
-
-                                                  <div className="form-check form-check-inline mb-4">
-                                                       <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            name="gender"
-                                                            id="other"
-                                                            value="other"
-                                                            checked={
-                                                                 formData.gender ===
-                                                                 "other"
-                                                            }
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-check-label"
-                                                            htmlFor="other"
-                                                       >
-                                                            Other
-                                                       </label>
-                                                  </div>
-                                                  {formData.gender ===
-                                                       "other" && (
-                                                       <div className="form-outline form-white mb-4">
-                                                            <input
-                                                                 type="number"
-                                                                 id="height"
-                                                                 name="height"
-                                                                 className="form-control form-control-lg"
-                                                                 value={
-                                                                      formData.other
-                                                                 }
-                                                                 onChange={
-                                                                      handleChange
-                                                                 }
-                                                            />
-                                                            <label
-                                                                 className="form-label"
-                                                                 htmlFor="height"
-                                                            >
-                                                                 Fill in the the
-                                                                 gender identity
-                                                                 you identify
-                                                                 with
-                                                            </label>
-                                                       </div>
-                                                  )}
-
-                                                  <div className="form-outline form-white mb-4">
-                                                       <input
-                                                            type="date"
-                                                            id="dob"
-                                                            name="dob"
-                                                            className="form-control form-control-lg"
-                                                            value={formData.dob}
-                                                            onChange={
-                                                                 handleChange
-                                                            }
-                                                       />
-                                                       <label
-                                                            className="form-label"
-                                                            htmlFor="dob"
-                                                       >
-                                                            Date of Birth
-                                                       </label>
-                                                  </div>
-                                                  <button
-                                                       className="btn btn-outline-dark btn-lg px-5"
-                                                       type="submit"
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="formAge"
+                                             >
+                                                  <Form.Label>Age</Form.Label>
+                                                  <Form.Control
+                                                       required
+                                                       type="number"
+                                                       name="age"
+                                                       value={formData.age}
+                                                       onChange={handleChange}
+                                                  />
+                                             </Form.Group>
+                                        </Row>
+                                        <Row className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="gender"
+                                             >
+                                                  <Form.Label>
+                                                       Gender
+                                                  </Form.Label>
+                                                  <Form.Select
+                                                       name="gender"
+                                                       value={formData.gender}
+                                                       onChange={handleChange}
+                                                       required
                                                   >
-                                                       Submit
-                                                  </button>
-                                             </form>
+                                                       <option></option>
+                                                       <option value="Female">
+                                                            Female
+                                                       </option>
+                                                       <option value="Male">
+                                                            Male
+                                                       </option>
+                                                       <option value="Other">
+                                                            Other
+                                                       </option>
+                                                  </Form.Select>
+                                             </Form.Group>
+                                        </Row>
+
+                                        <Row className="mb-3">
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="formWeight"
+                                             >
+                                                  <Form.Label>
+                                                       Weight
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                       type="number"
+                                                       required
+                                                       name="weight"
+                                                       value={formData.weight}
+                                                       onChange={handleChange}
+                                                  />
+                                             </Form.Group>
+
+                                             <Form.Group
+                                                  as={Col}
+                                                  controlId="formHeight"
+                                             >
+                                                  <Form.Label>
+                                                       Height
+                                                  </Form.Label>
+
+                                                  <Form.Control
+                                                       type="number"
+                                                       required
+                                                       name="height"
+                                                       value={formData.height}
+                                                       onChange={handleChange}
+                                                  />
+                                             </Form.Group>
+                                        </Row>
+
+                                        <div
+                                             style={{
+                                                  display: "flex",
+                                                  justifyContent: "Center",
+                                             }}
+                                        >
+                                             <Button
+                                                  type="submit"
+                                                  style={{
+                                                       background: "#F3A64B",
+                                                       borderColor: "#F3A64B",
+                                                       marginTop: "1.5rem",
+                                                  }}
+                                                  disabled={!enableButton}
+                                             >
+                                                  Submit
+                                             </Button>
                                         </div>
-                                   </div>
+                                   </Form>
                               </div>
                          </div>
                     </div>

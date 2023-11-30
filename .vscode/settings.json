@@ -11,5 +11,8 @@
     },
     "prettier.printWidth": 70,
     "prettier.tabWidth": 4,
+    "search.exclude": {
+        "**/node_modules": false
+    },
 
 }
