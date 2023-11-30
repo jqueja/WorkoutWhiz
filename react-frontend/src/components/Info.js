@@ -9,43 +9,61 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 function Info() {
-     const [validated, setValidated] = useState(false);
-
      const navigate = useNavigate();
-
-     const [enableButton, setEnableButton] = useState(false);
-
      const [formData, setFormData] = useState({
-          age: "",
-          gender: "",
-          dob: "",
           weight: "",
           height: "",
+          age: "",
+          gender: "",
+          otherText: "",
+          dob: "",
      });
-
      const handleChange = (e) => {
-          setFormData((formData) => ({
-               ...formData,
-               [e.target.name]: e.target.value,
-          }));
+          const { name, value } = e.target;
 
-          if (e.target.checkValidity() === true) {
-               setEnableButton(true);
+          // Handle special case for "Other" radio button
+          if (name === "gender" && value !== "other") {
+               // If the user switched to "Male" or "Female," reset the otherText field
+               setFormData((prevData) => ({
+                    ...prevData,
+                    gender: value,
+                    otherText: "",
+               }));
+          } else {
+               // For other fields or "Other" radio button selected, update the state
+               setFormData((prevData) => ({
+                    ...prevData,
+                    [name]: value,
+               }));
           }
      };
 
-     const handleSubmit = (e) => {
+     const handleSubmit = async (e) => {
           e.preventDefault();
 
-          if (e.target.checkValidity() === false) {
-               e.preventDefault();
-               e.stopPropagation();
-          }
+          try {
+               const response = await fetch("http://localhost:3000/signup", {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+               });
 
-          setValidated(true);
-          if (e.target.checkValidity() === true) {
-               console.log("Form data submitted:", formData);
-               navigate("/successful-signup");
+               if (response.ok) {
+                    console.log("Form data submitted successfully");
+                    navigate("/successful-signup");
+               } else {
+                    // Handle error response
+                    console.log(JSON.stringify(formData));
+                    console.error(
+                         "Error submitting form data:",
+                         response.statusText
+                    );
+               }
+          } catch (error) {
+               console.log(JSON.stringify(formData));
+               console.error("Error submitting form data:", error.message);
           }
      };
 
