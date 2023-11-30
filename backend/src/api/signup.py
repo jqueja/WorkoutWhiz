@@ -7,6 +7,8 @@ load_dotenv()
 
 import os
 from supabase import create_client
+from pydantic import BaseModel
+
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -18,10 +20,19 @@ router = APIRouter(
 )
 
 
-@router.post("/create-user")
-def create_user(user_email: str, user_password: str, first_name: str, last_name: str):
+class CreateUserRequest(BaseModel):
+    user_email: str
+    user_password: str
+    first_name: str
+    last_name: str
 
-    new_user = supabase.auth.sign_up({ "email": user_email, "password": user_password })
+@router.post("/create-user")
+def create_user(request: CreateUserRequest):
+
+    new_user = supabase.auth.sign_up({
+        "email": request.user_email,
+        "password": request.user_password
+    })
 
     user_id = new_user.user.id
 
@@ -29,10 +40,10 @@ def create_user(user_email: str, user_password: str, first_name: str, last_name:
         result = connection.execute(
             sqlalchemy.text(
             """
-            INSERT INTO public_profile (id, first_name, last_name, email)
+            INSERT INTO users (id, first_name, last_name, email)
             VALUES (:user_id, :first_name, :last_name, :user_email)
             """),
-            {"user_id": user_id, "first_name": first_name, "last_name": last_name, "user_email": user_email}
+            {"user_id": user_id, "first_name": request.first_name, "last_name": request.last_name, "user_email": request.user_email}
         )
 
     return "OK"

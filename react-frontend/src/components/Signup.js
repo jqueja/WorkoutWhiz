@@ -33,16 +33,47 @@ function Signup() {
 
      const navigate = useNavigate();
 
-     const handleSubmit = (e) => {
+     const handleSubmit = async (e) => {
           e.preventDefault();
+
           // Check if the password and confirm password match
           if (formData.password !== formData.confirmPassword) {
                setPasswordMatchError(true);
                return;
           }
-          // Handle form submission logic here
-          console.log("Form data submitted:", formData);
-          navigate("/info");
+
+          try {
+               const response = await fetch(
+                    "http://127.0.0.1:8000/signup/create-user",
+                    {
+                         method: "POST",
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify({
+                              user_email: formData.email,
+                              user_password: formData.password,
+                              first_name: formData.firstName,
+                              last_name: formData.lastName,
+                         }),
+                    }
+               );
+
+               if (!response.ok) {
+                    // Handle error cases, e.g., show an error message
+                    console.error(
+                         "Failed to create user:",
+                         response.statusText
+                    );
+                    return;
+               }
+
+               // Handle success cases, e.g., navigate to the next page
+               console.log("User created successfully");
+               navigate("/info");
+          } catch (error) {
+               console.error("An error occurred:", error);
+          }
      };
 
      return (
