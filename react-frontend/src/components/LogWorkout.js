@@ -5,6 +5,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import "./Components.scss";
 
 function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
@@ -12,6 +13,10 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      const [show, setShow] = useState(false);
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
+
+     // verification states
+     const [validated, setValidated] = useState(false);
+     const [errors, setErrors] = useState({});
 
      // Workout Data states
      const [date, setDate] = useState("");
@@ -23,28 +28,61 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      });
 
      const updateField = (e) => {
-          // update weight info
-          setWeightData((weightData) => ({
-               ...weightData,
-               [e.target.name]: e.target.value,
+          const { name, value } = e.target;
+
+          // Validate the field and update the errors state
+          let fieldErrors = { ...errors };
+          switch (name) {
+               case "date":
+                    fieldErrors.date = value ? "" : "Please provide a date.";
+                    break;
+               case "exercise":
+                    fieldErrors.exercise = value
+                         ? ""
+                         : "Please provide a type of exercise.";
+                    break;
+               case "workoutName":
+                    fieldErrors.workoutName = value
+                         ? ""
+                         : "Please provide workout name.";
+                    break;
+               // Add validation for other fields if needed
+               default:
+                    break;
+          }
+
+          // Update the errors state
+          setErrors(fieldErrors);
+
+          // Update weight info
+          setWeightData((prevWeightData) => ({
+               ...prevWeightData,
+               [name]: value,
           }));
      };
 
      const handleSubmit = (e) => {
+          const form = e.currentTarget;
           e.preventDefault();
+          if (form.checkValidity() === false) {
+               e.preventDefault();
+               e.stopPropagation();
+               setValidated(true); // Show validation errors
+          } else {
+               setValidated(false);
+               // set data object
+               const newWorkoutData = {
+                    date: date,
+                    lift_name: weightData.workoutName, // match the field name
+                    weight: weightData.weight.toString(), // convert to string
+                    reps: weightData.reps.toString(), // convert to string
+                    sets: weightData.sets.toString(), // convert to string
+               };
 
-          // Build the new workout data object
-          const newWorkoutData = {
-               date: date,
-               lift_name: weightData.workoutName, // match the field name
-               weight: weightData.weight.toString(), // convert to string
-               reps: weightData.reps.toString(), // convert to string
-               sets: weightData.sets.toString(), // convert to string
-          };
-
-          handleLogWorkoutSubmit(newWorkoutData);
-          handleClose();
-          console.log(newWorkoutData);
+               handleLogWorkoutSubmit();
+               handleClose();
+               console.log(newWorkoutData);
+          }
      };
 
      return (
@@ -75,7 +113,19 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                          <Offcanvas.Title>Log a new workout</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body style={{ paddingTop: "8px" }}>
-                         <Form onSubmit={handleSubmit}>
+                         <Form
+                              noValidate
+                              validated={validated}
+                              onSubmit={handleSubmit}
+                         >
+                              {/* Alert for displaying validation errors */}
+                              {validated && (
+                                   <Alert variant="danger">
+                                        Please fix the validation errors before
+                                        submitting.
+                                   </Alert>
+                              )}
+
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
@@ -87,10 +137,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                         onChange={(e) =>
                                              setDate(e.target.value)
                                         }
+                                        isInvalid={!!errors.date}
+                                        required
                                    />
+                                   <Form.Control.Feedback type="invalid">
+                                        {errors.date}
+                                   </Form.Control.Feedback>
                               </Form.Group>
 
-                              <Form.Group
+                              {/* <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
                               >
@@ -108,71 +163,92 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              Distance
                                         </option>
                                    </Form.Select>
-                              </Form.Group>
+                                   <Form.Control.Feedback type="invalid">
+                                        {errors.exercise}
+                                   </Form.Control.Feedback>
+                              </Form.Group> */}
 
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
-                              > */}
+                              >
                                    <Form.Label>
-                                        {weightData.exercise === "distance"
-                                             ? "Distance Activity Name"
-                                             : "Weightlifting Exercise Name"}
+                                        Weightlifting Exercise Name
                                    </Form.Label>
                                    <Form.Control
                                         name="workoutName"
+                                        type="text"
                                         value={weightData.workoutName}
                                         onChange={updateField}
+                                        required
                                    />
+                                   <Form.Control.Feedback type="invalid">
+                                        {errors.workoutName}
+                                   </Form.Control.Feedback>
                               </Form.Group>
-
-                              {weightData.exercise !== "distance" && (
-                                   <Row>
-                                        <Form.Group
-                                             style={{ marginBottom: "2rem" }}
-                                             className="mb-3"
-                                             as={Col}
-                                        >
-                                             <Form.Label className="text-center">
-                                                  Weight
-                                             </Form.Label>
-                                             <Form.Control
-                                                  placeholder="lbs"
-                                                  name="weight"
-                                                  value={weightData.weight}
-                                                  onChange={updateField}
-                                             />
-                                        </Form.Group>
-                                        <Form.Group
-                                             style={{ marginBottom: "2rem" }}
-                                             className="mb-3"
-                                             as={Col}
-                                        >
-                                             <Form.Label className="text-center">
-                                                  Sets
-                                             </Form.Label>
-                                             <Form.Control
-                                                  name="sets"
-                                                  value={weightData.sets}
-                                                  onChange={updateField}
-                                             />
-                                        </Form.Group>
-                                        <Form.Group
-                                             style={{ marginBottom: "2rem" }}
-                                             className="mb-3"
-                                             as={Col}
-                                        >
-                                             <Form.Label className="text-center">
-                                                  Reps
-                                             </Form.Label>
-                                             <Form.Control
-                                                  name="reps"
-                                                  value={weightData.reps}
-                                                  onChange={updateField}
-                                             />
-                                        </Form.Group>
-                                   </Row>
-                              )}
+                              <Row>
+                                   <Form.Group
+                                        style={{ marginBottom: "2rem" }}
+                                        className="mb-3"
+                                        as={Col}
+                                   >
+                                        <Form.Label className="text-center">
+                                             Weight
+                                        </Form.Label>
+                                        <Form.Control
+                                             placeholder="lbs"
+                                             name="weight"
+                                             type="number"
+                                             min="0"
+                                             value={weightData.weight}
+                                             onChange={updateField}
+                                             required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                             {errors.weight}
+                                        </Form.Control.Feedback>
+                                   </Form.Group>
+                                   <Form.Group
+                                        style={{ marginBottom: "2rem" }}
+                                        className="mb-3"
+                                        as={Col}
+                                   >
+                                        <Form.Label className="text-center">
+                                             Sets
+                                        </Form.Label>
+                                        <Form.Control
+                                             name="sets"
+                                             type="number"
+                                             min="0"
+                                             value={weightData.sets}
+                                             onChange={updateField}
+                                             required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                             {errors.sets}
+                                        </Form.Control.Feedback>
+                                   </Form.Group>
+                                   <Form.Group
+                                        style={{ marginBottom: "2rem" }}
+                                        className="mb-3"
+                                        as={Col}
+                                   >
+                                        <Form.Label className="text-center">
+                                             Reps
+                                        </Form.Label>
+                                        <Form.Control
+                                             name="reps"
+                                             type="number"
+                                             min="0"
+                                             value={weightData.reps}
+                                             onChange={updateField}
+                                             required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                             {errors.reps}
+                                        </Form.Control.Feedback>
+                                   </Form.Group>
+                              </Row>
 
                               <div
                                    style={{
@@ -196,4 +272,5 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
           </>
      );
 }
+
 export default LogWorkout;
