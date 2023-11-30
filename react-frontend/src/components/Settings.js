@@ -5,10 +5,14 @@ import EditSettings from "./EditSettings.js";
 import supabase from "./Supabase";
 import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
+import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 
 import "./Components.scss";
 
 function Settings() {
+     const navigate = useNavigate();
+
      const { userId } = useUser();
      console.log("Current userId:", userId);
 
@@ -87,6 +91,8 @@ function Settings() {
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
+                         paddingLeft: "0px",
+                         paddingRight: "0px",
                     }}
                >
                     Settings
@@ -110,6 +116,16 @@ function Settings() {
                     <br />
                     Height: {userSettings.height}
                     <br />
+                    <Button
+                         style={{
+                              background: "#F3A64B",
+                              borderColor: "#F3A64B",
+                              marginTop: "1.5rem",
+                         }}
+                         onClick={() => navigate("/logout")}
+                    >
+                         Logout
+                    </Button>
                </Container>
           </motion.div>
      );

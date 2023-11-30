@@ -12,6 +12,7 @@ import SuccessfulSignup from "./components/SuccessfulSignup";
 import ForgotPassword from "./components/ForgotPassword";
 import "./App.scss";
 import { AnimatePresence } from "framer-motion";
+import Container from "@material-ui/core/Container";
 
 function App() {
      return (
@@ -27,7 +28,12 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Home />
+                                             <Container
+                                                  style={{ marginTop: "4rem" }}
+                                             >
+                                                  <Home />
+                                             </Container>
+
                                              <NavHeader page={"home"} />
                                         </React.Fragment>
                                    }
@@ -39,7 +45,11 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Music />
+                                             <Container
+                                                  style={{ marginTop: "4rem" }}
+                                             >
+                                                  <Music />
+                                             </Container>{" "}
                                              <NavHeader page={"music"} />
                                         </React.Fragment>
                                    }
@@ -51,7 +61,11 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Settings />
+                                             <Container
+                                                  style={{ marginTop: "4rem" }}
+                                             >
+                                                  <Settings />
+                                             </Container>
                                              <NavHeader page={"settings"} />
                                         </React.Fragment>
                                    }
@@ -66,7 +80,7 @@ function App() {
                               <Route path="/info" element={<Info />} />
                               <Route path="/signup" element={<Signup />} />
                               <Route
-                                   path="/successul-signup"
+                                   path="/successful-signup"
                                    element={<SuccessfulSignup />}
                               />
                               <Route

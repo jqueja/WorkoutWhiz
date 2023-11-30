@@ -16,6 +16,8 @@ function Music() {
                     style={{
                          display: "flex",
                          justifyContent: "space-between",
+                         paddingLeft: "0px",
+                         paddingRight: "0px",
                     }}
                >
                     Music
@@ -28,13 +30,15 @@ function Music() {
                          alignItems: "center",
                          justifyCntent: "center",
                          flexDirection: "column",
+                         paddingLeft: "0px",
+                         paddingRight: "0px",
                     }}
                >
                     {" "}
                     <iframe
                          style={{ borderRadius: "12px", marginBottom: "1rem" }}
                          src="https://open.spotify.com/embed/playlist/4jwOXOlk6eUe3Oh2B515mZ?utm_source=generator&theme=0"
-                         width="90%"
+                         width="100%"
                          height="500"
                          frameBorder="0"
                          allowfullscreen=""
@@ -42,14 +46,6 @@ function Music() {
                          loading="lazy"
                     ></iframe>
                </Container>
-               {/* <Carousel activeIndex={index} onSelect={handleSelect}>
-                    <Carousel.Item>
-                         <WeightliftCarousel />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                         <DistanceCarousel />
-                    </Carousel.Item>
-               </Carousel> */}
           </motion.div>
      );
 }
