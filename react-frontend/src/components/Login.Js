@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Login.scss"; // Import your CSS file
+import "./LogSignIn.scss";
 import supabase from "./Supabase";
 import { useUser } from "../UserContext";
 import white_logo from "../images/WorkoutWhizLogo1White.png";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-
-/* eslint-disable react/no-unescaped-entities */
 
 function Login() {
      const [email, setEmail] = useState("");

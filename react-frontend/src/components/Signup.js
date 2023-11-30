@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Login.scss"; // Import your CSS file
+import "./LogSignIn.scss";
 import { Link, useNavigate } from "react-router-dom";
 import white_logo from "../images/WorkoutWhizLogo1White.png";
 import Image from "react-bootstrap/Image";
@@ -153,13 +153,9 @@ function Signup() {
                                                             formData.confirmPassword
                                                        }
                                                        onChange={handleChange}
-                                                       // isValid={
-                                                       //      !passwordMatchError
-                                                       // }
                                                        isInvalid={
                                                             !!passwordMatchError
                                                        }
-                                                       // isValid={false}
                                                        required
                                                   />
                                                   {passwordMatchError ? (

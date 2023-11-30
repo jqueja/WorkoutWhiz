@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "./Login.scss"; // Import your CSS file
+import React, { useState } from "react";
+import "./LogSignIn.scss";
 import { useNavigate } from "react-router-dom";
 import white_logo from "../images/WorkoutWhizLogo1White.png";
 import Image from "react-bootstrap/Image";

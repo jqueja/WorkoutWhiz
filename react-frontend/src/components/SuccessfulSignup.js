@@ -1,5 +1,5 @@
 import React from "react";
-import "./Login.scss"; // Import your CSS file
+import "./LogSignIn.scss";
 import white_logo from "../images/WorkoutWhizLogo1White.png";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
