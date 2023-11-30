@@ -81,6 +81,8 @@ def create_user(request: CreateUserRequest):
 @router.post("/add-info")
 def add_info(request: UserInfo):
 
+    print(request)
+
 
     with db.engine.begin() as connection:
         result = connection.execute(

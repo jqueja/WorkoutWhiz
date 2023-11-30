@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 
 function Info() {
      const navigate = useNavigate();
+     const location = useLocation();
+     const userId = location.state?.userId || null; // Get userId from state
      const [formData, setFormData] = useState({
           weight: "",
           height: "",
@@ -13,6 +15,7 @@ function Info() {
           otherText: "",
           dob: "",
      });
+
      const handleChange = (e) => {
           const { name, value } = e.target;
 
@@ -36,15 +39,39 @@ function Info() {
      const handleSubmit = async (e) => {
           e.preventDefault();
 
+          const formattedUserId = `"${userId}"`;
+
+          // Convert weight, height, and age to numbers
+          const weight = parseInt(formData.weight);
+          const height = parseInt(formData.height);
+          const age = parseInt(formData.age);
+
+          // Log the request body before sending the request
+          console.log("Request Body:", {
+               user_id: formattedUserId,
+               weight: weight,
+               height: height,
+               age: age,
+               gender: formData.gender,
+               dob: formData.dob,
+          });
+
           try {
                const response = await fetch(
-                    "http://localhost:3000/signup/add-info",
+                    "http://127.0.0.1:8000/signup/add-info",
                     {
                          method: "POST",
                          headers: {
                               "Content-Type": "application/json",
                          },
-                         body: JSON.stringify(formData),
+                         body: JSON.stringify({
+                              id: formattedUserId,
+                              weight: weight,
+                              height: height,
+                              age: age,
+                              gender: formData.gender,
+                              dob: formData.dob,
+                         }),
                     }
                );
 
