@@ -59,12 +59,33 @@ function Signup() {
                     }
                );
 
+               console.log("Backend Response:", response); // Log the entire response
+
                if (!response.ok) {
                     // Handle error cases, e.g., show an error message
                     console.error(
                          "Failed to create user:",
                          response.statusText
                     );
+
+                    try {
+                         // Attempt to read the response body
+                         const responseBody = await response.json();
+                         if (
+                              response.status === 400 &&
+                              responseBody.detail === "Email already registered"
+                         ) {
+                              console.log("Alert should show up here");
+                              // Use alert to show a pop-up message
+                              alert(
+                                   "Email is already registered. Please use a different email."
+                              );
+                         }
+                    } catch (error) {
+                         // Handle JSON parsing error
+                         console.error("Error parsing JSON response:", error);
+                    }
+
                     return;
                }
 

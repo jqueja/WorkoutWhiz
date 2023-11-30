@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, text
 import sqlalchemy
 from src import database as db
 from dotenv import load_dotenv
+from fastapi.responses import JSONResponse
+
 load_dotenv()
 
 import os
@@ -26,8 +28,33 @@ class CreateUserRequest(BaseModel):
     first_name: str
     last_name: str
 
+class UserInfo(BaseModel):
+    uuid: str
+    weight: int
+    height: int
+    Age: int
+    gender: str
+    dob: str
+
 @router.post("/create-user")
 def create_user(request: CreateUserRequest):
+
+    with db.engine.begin() as connection:
+        existing_user_result = connection.execute(
+            sqlalchemy.text(
+            """
+            SELECT id
+            FROM users
+            WHERE email = :user_email
+            """),
+            {"user_email": request.user_email}
+        )
+
+    existing_user = existing_user_result.fetchone()
+
+    if existing_user:
+        # If the email exists, raise an HTTPException with a 400 status code and error message
+        raise HTTPException(status_code=400, detail="Email already registered")
 
     new_user = supabase.auth.sign_up({
         "email": request.user_email,
@@ -46,4 +73,10 @@ def create_user(request: CreateUserRequest):
             {"user_id": user_id, "first_name": request.first_name, "last_name": request.last_name, "user_email": request.user_email}
         )
 
-    return "OK"
+    # Return the user_id in the response
+    return JSONResponse(content={"user_id": user_id}, status_code=200)
+
+
+@router.post("/add-info")
+def add_info(request: UserInfo):
+    pass
