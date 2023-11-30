@@ -1,46 +1,76 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Request, HTTPException, status
 from pydantic import BaseModel
+from datetime import date, datetime
 import sqlalchemy
 from src import database as db
-from datetime import date
 
 router = APIRouter(
     prefix="/workouts",
     tags=["workouts"],
 )
 
-class UserSettings(BaseModel):
-    first_name: str = None
-    last_name: str = None
-    dob: str = None
-    age: str = None
-    gender: str = None
-    weight: str = None
-    height_ft: str = None
-
 @router.get("/{user_id}")
-def settings_info(user_id: int):
+def display_workouts_info(user_id: int):
     with db.engine.begin() as connection:
         result = connection.execute(sqlalchemy.text(
             """
-            SELECT user_id, first_name, last_name, weight, age, gender, dob, height
-            FROM users
+            SELECT date, lift_name, weight, sets, reps
+            FROM workout_log
+            JOIN weighlifting ON weighlifting.log_id = workout_log.log_id
             WHERE user_id = :user_id
             """
-        ), {"user_id": user_id}).first()
+        ), {"user_id": user_id}).fetchall()
 
-    if result is None:
+
+    if result == []:
         # Raise an HTTPException with a 404 status code and an error message
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
+    final_array = []
+    for exercise in result:
+        final_array.append(
+            {
+                "date": exercise.date,
+                "lift_name": exercise.lift_name, 
+                "weight": exercise.weight,
+                "sets": exercise.sets,
+                "reps": exercise.reps
+            }
+        )
+    return final_array
 
-    return {
-        "user_id": result.user_id, 
-        "first_name": result.first_name,
-        "last_name": result.last_name,
-        "weight": result.weight,
-        "age": result.age,
-        "gender": result.gender,
-        "dob": result.dob,
-        "height": result.height
-    }
+class UserWorkouts(BaseModel):
+    date: date
+    lift_name: str
+    weight: str
+    sets: str
+    reps: str
+
+@router.post("/{user_id}/update")
+def update_workouts_info(user_id: int, userWorkouts: UserWorkouts):
+    with db.engine.begin() as connection:
+        result_id = connection.execute(sqlalchemy.text(
+            """
+            INSERT INTO workout_log (user_id, date)
+            VALUES (:user_id, :date)
+            RETURNING log_id
+            """
+        ), {"user_id": user_id, "date": userWorkouts.date}).scalar()
+
+        if result_id is None:
+        # Raise an HTTPException with a 404 status code and an error message
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workout not found")
+
+        result_workout = connection.execute(sqlalchemy.text(
+            """
+            INSERT INTO weighlifting (log_id, lift_name, weight, sets, reps)
+            VALUES (:result_id, :lift_name, :weight, :sets, :reps)
+            RETURNING wl_id
+            """
+        ), {"result_id": result_id, "lift_name": userWorkouts.lift_name, "weight": userWorkouts.weight, "sets": userWorkouts.sets, "reps": userWorkouts.reps}).scalar()
+
+        if result_workout is None:
+        # Raise an HTTPException with a 404 status code and an error message
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workout not found")
+    
+    return "OK"

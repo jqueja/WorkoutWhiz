@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
@@ -17,30 +15,12 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
 
      // Workout Data states
      const [date, setDate] = useState("");
-     const [saveData, setSaveData] = useState("");
      const [weightData, setWeightData] = useState({
           workoutName: "",
           weight: "",
           reps: "",
           sets: "",
      });
-     const [data, setData] = useState({
-          weightlifting: [],
-     });
-
-     // Accessing local storage
-     function useWorkoutLocalStorage(key, initialValue) {
-          console.log(key, initialValue);
-          const savedValue = JSON.parse(localStorage.getItem(key));
-          // check entries with the same date
-          if (savedValue) {
-               savedValue.push(initialValue);
-               localStorage.setItem(key, JSON.stringify(savedValue));
-          } else {
-               localStorage.setItem(key, JSON.stringify([initialValue].flat()));
-          }
-          return null;
-     }
 
      const updateField = (e) => {
           // update weight info
@@ -51,28 +31,20 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      };
 
      const handleSubmit = (e) => {
-          //const form = event.currentTarget;
-          // if (form.checkValidity() === false) {
-          //      event.preventDefault();
-          //      event.stopPropagation();
-          // }
-          //setValidated(true);
-
           e.preventDefault();
-          // set data object
-          setData({
-               weightlifting: weightData,
-          });
 
-          // save data object
-          setSaveData({
+          // Build the new workout data object
+          const newWorkoutData = {
                date: date,
-               data: data,
-          });
-          useWorkoutLocalStorage(date, weightData);
+               lift_name: weightData.workoutName, // match the field name
+               weight: weightData.weight.toString(), // convert to string
+               reps: weightData.reps.toString(), // convert to string
+               sets: weightData.sets.toString(), // convert to string
+          };
 
-          handleLogWorkoutSubmit();
+          handleLogWorkoutSubmit(newWorkoutData);
           handleClose();
+          console.log(newWorkoutData);
      };
 
      return (
@@ -103,11 +75,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                          <Offcanvas.Title>Log a new workout</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body style={{ paddingTop: "8px" }}>
-                         <Form
-                              noValidate
-                              // validated={validated}
-                              onSubmit={handleSubmit}
-                         >
+                         <Form onSubmit={handleSubmit}>
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
@@ -119,11 +87,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                         onChange={(e) =>
                                              setDate(e.target.value)
                                         }
-                                        //isInvalid={!!errors.date}
                                    />
-                                   {/* <Form.Control.Feedback type='invalid'>
-                                        {errors.date}
-                                   </Form.Control.Feedback> */}
                               </Form.Group>
 
                               <Form.Group
@@ -134,7 +98,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
 
                                    <Form.Select
                                         name="exercise"
-                                        value={data.exercise}
+                                        value={weightData.exercise}
                                         onChange={updateField}
                                    >
                                         <option value="weightlifting">
@@ -145,15 +109,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                         </option>
                                    </Form.Select>
                               </Form.Group>
+
                               <Form.Group
                                    style={{ marginBottom: "2rem" }}
                                    className="mb-3"
                               >
                                    <Form.Label>
-                                        {" "}
-                                        {data.exercise === "distance"
+                                        {weightData.exercise === "distance"
                                              ? "Distance Activity Name"
-                                             : "Weightlifiting Exercise Name"}
+                                             : "Weightlifting Exercise Name"}
                                    </Form.Label>
                                    <Form.Control
                                         name="workoutName"
@@ -161,7 +125,8 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                         onChange={updateField}
                                    />
                               </Form.Group>
-                              {data.exercise !== "distance" ? (
+
+                              {weightData.exercise !== "distance" && (
                                    <Row>
                                         <Form.Group
                                              style={{ marginBottom: "2rem" }}
@@ -207,8 +172,6 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              />
                                         </Form.Group>
                                    </Row>
-                              ) : (
-                                   ""
                               )}
 
                               <div
