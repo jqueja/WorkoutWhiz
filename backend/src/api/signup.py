@@ -4,6 +4,7 @@ import sqlalchemy
 from src import database as db
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
+from uuid import UUID
 
 load_dotenv()
 
@@ -29,10 +30,10 @@ class CreateUserRequest(BaseModel):
     last_name: str
 
 class UserInfo(BaseModel):
-    uuid: str
+    id: UUID
     weight: int
     height: int
-    Age: int
+    age: int
     gender: str
     dob: str
 
@@ -79,4 +80,18 @@ def create_user(request: CreateUserRequest):
 
 @router.post("/add-info")
 def add_info(request: UserInfo):
-    pass
+
+
+    with db.engine.begin() as connection:
+        result = connection.execute(
+            sqlalchemy.text(
+            """
+            UPDATE users
+            SET weight = :weight, height = :height, age = :age, gender = :gender, dob = :dob
+            WHERE id = :user_id
+            """),
+            {"user_id": request.id, "weight": request.weight, "height": request.height, "age": request.age,
+            "gender": request.gender, "dob": request.dob}
+        )
+
+    return "OK"

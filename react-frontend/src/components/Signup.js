@@ -33,6 +33,8 @@ function Signup() {
 
      const navigate = useNavigate();
 
+     // ... (previous code)
+
      const handleSubmit = async (e) => {
           e.preventDefault();
 
@@ -59,8 +61,6 @@ function Signup() {
                     }
                );
 
-               console.log("Backend Response:", response); // Log the entire response
-
                if (!response.ok) {
                     // Handle error cases, e.g., show an error message
                     console.error(
@@ -69,13 +69,11 @@ function Signup() {
                     );
 
                     try {
-                         // Attempt to read the response body
                          const responseBody = await response.json();
                          if (
                               response.status === 400 &&
                               responseBody.detail === "Email already registered"
                          ) {
-                              console.log("Alert should show up here");
                               // Use alert to show a pop-up message
                               alert(
                                    "Email is already registered. Please use a different email."
@@ -90,12 +88,16 @@ function Signup() {
                }
 
                // Handle success cases, e.g., navigate to the next page
-               console.log("User created successfully");
-               navigate("/info");
+               const responseData = await response.json();
+               const userId = responseData.user_id;
+               console.log("User created successfully with ID:", userId);
+               navigate("/info", { state: { userId } });
           } catch (error) {
                console.error("An error occurred:", error);
           }
      };
+
+     // ... (remaining code)
 
      return (
           <section className="vh-100 gradient-custom">

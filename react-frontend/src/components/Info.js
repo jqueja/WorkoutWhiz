@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Info.scss"; // Import your CSS file
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function Info() {
      const navigate = useNavigate();
@@ -36,13 +37,16 @@ function Info() {
           e.preventDefault();
 
           try {
-               const response = await fetch("http://localhost:3000/signup", {
-                    method: "POST",
-                    headers: {
-                         "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-               });
+               const response = await fetch(
+                    "http://localhost:3000/signup/add-info",
+                    {
+                         method: "POST",
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify(formData),
+                    }
+               );
 
                if (response.ok) {
                     console.log("Form data submitted successfully");
