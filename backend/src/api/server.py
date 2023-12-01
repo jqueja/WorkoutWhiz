@@ -34,6 +34,7 @@ app.add_middleware(
 
 
 app.include_router(settings.router)
+app.include_router(login.router)
 # app.include_router(login.router)
 # app.include_router(login.router)
 app.include_router(signup.router)

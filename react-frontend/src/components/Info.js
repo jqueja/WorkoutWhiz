@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./LogSignIn.scss";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import white_logo from "../images/WorkoutWhizLogo1White.png";
 import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
@@ -13,6 +14,8 @@ function Info() {
      const [enableButton, setEnableButton] = useState(false);
 
      const navigate = useNavigate();
+     const location = useLocation();
+     const userId = location.state?.userId || null; // Get userId from state
      const [formData, setFormData] = useState({
           weight: "",
           height: "",
@@ -21,6 +24,7 @@ function Info() {
           otherText: "",
           dob: "",
      });
+
      const handleChange = (e) => {
           setFormData((formData) => ({
                ...formData,
@@ -39,17 +43,45 @@ function Info() {
                e.stopPropagation();
           }
 
+          const formattedUserId = `"${userId}"`.replace(/"/g, "");
+
+          // Log the request body before sending the request
+
+          // Convert weight, height, and age to numbers
+          const weight = parseInt(formData.weight, 10);
+          const height = parseInt(formData.height, 10);
+          const age = parseInt(formData.age, 10);
+
+          // Log the request body before sending the request
+          const requestBody = {
+               id: formattedUserId,
+               weight: weight,
+               height: height,
+               age: age,
+               gender: formData.gender,
+               dob: formData.dob,
+          };
+
+          console.log("Request Body:", requestBody);
+
           setValidated(true);
           if (e.target.checkValidity() === true) {
                try {
                     const response = await fetch(
-                         "http://localhost:3000/signup",
+                         "http://127.0.0.1:8000/signup/add-info",
                          {
                               method: "POST",
                               headers: {
                                    "Content-Type": "application/json",
                               },
-                              body: JSON.stringify(formData),
+                              body: JSON.stringify({
+                                   id: formattedUserId,
+                                   weight: parseInt(formData.weight, 10), // Corrected the typo
+                                   height: parseInt(formData.height, 10), // Convert height to an integer
+                                   age: parseInt(formData.age, 10), // Convert age to an integer
+                                   gender: formData.gender,
+                                   dob: formData.dob,
+                              }),
                          }
                     );
 

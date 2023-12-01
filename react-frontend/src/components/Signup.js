@@ -38,25 +38,70 @@ function Signup() {
           console.log(passwordMatchError);
      }, [formData.confirmPassword, formData.password]);
 
-     const handleSubmit = (e) => {
+     // ... (previous code)
+
+     const handleSubmit = async (e) => {
           e.preventDefault();
-          if (formData.password === formData.confirmPassword) {
-               setPasswordMatchError(false);
-          } else {
+
+          // Check if the password and confirm password match
+          if (formData.password !== formData.confirmPassword) {
                setPasswordMatchError(true);
           }
 
-          if (e.target.checkValidity() === false || passwordMatchError) {
-               e.preventDefault();
-               e.stopPropagation();
-          }
+          try {
+               const response = await fetch(
+                    "http://127.0.0.1:8000/signup/create-user",
+                    {
+                         method: "POST",
+                         headers: {
+                              "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify({
+                              user_email: formData.email,
+                              user_password: formData.password,
+                              first_name: formData.firstName,
+                              last_name: formData.lastName,
+                         }),
+                    }
+               );
 
-          setValidated(true);
-          if (e.target.checkValidity() === true && !passwordMatchError) {
-               console.log("Form data submitted:", formData);
-               navigate("/info");
+               if (!response.ok) {
+                    // Handle error cases, e.g., show an error message
+                    console.error(
+                         "Failed to create user:",
+                         response.statusText
+                    );
+
+                    try {
+                         const responseBody = await response.json();
+                         if (
+                              response.status === 400 &&
+                              responseBody.detail === "Email already registered"
+                         ) {
+                              // Use alert to show a pop-up message
+                              alert(
+                                   "Email is already registered. Please use a different email."
+                              );
+                         }
+                    } catch (error) {
+                         // Handle JSON parsing error
+                         console.error("Error parsing JSON response:", error);
+                    }
+
+                    return;
+               }
+
+               // Handle success cases, e.g., navigate to the next page
+               const responseData = await response.json();
+               const userId = responseData.user_id;
+               console.log("User created successfully with ID:", userId);
+               navigate("/info", { state: { userId } });
+          } catch (error) {
+               console.error("An error occurred:", error);
           }
      };
+
+     // ... (remaining code)
 
      return (
           <section className="vh-100 gradient-custom-light">
