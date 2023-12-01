@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import EditSettings from "./EditSettings.js";
-import supabase from "./Supabase.js";
 import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
 import Button from "react-bootstrap/Button";
