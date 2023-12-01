@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss"; // Import your CSS file
-import supabase from "./Supabase";
+//import supabase from "./Supabase";
 import { useUser } from "../UserContext";
 
 /* eslint-disable react/no-unescaped-entities */
@@ -23,29 +23,42 @@ function Login() {
      };
 
      const handleLogin = async () => {
+          console.log(email);
+          console.log(password);
           try {
-               let { data: login, error } = await supabase
-                    .from("login")
-                    .select("*")
-                    .eq("email", email)
-                    .eq("password", password);
+               const response = await fetch("http://127.0.0.1:8000/login", {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                         user_email: email,
+                         user_password: password,
+                    }),
+               });
 
-               if (error) {
-                    console.error("Error fetching data:", error.message);
-               } else {
-                    if (login.length === 0) {
-                         console.log("No match found.");
-                         // Handle no match found case
-                    } else {
-                         setUserId(login[0].id);
-                         console.log("Current userId:", userId);
-                         // Handle successful login, e.g., redirect to a dashboard
-                         // Use history to navigate to the settings page
-                         navigate("/");
-                    }
+               if (!response.ok) {
+                    console.error("Error during login:", response.statusText);
+                    // Show an alert for login failure
+                    alert("Login failed. Please check your credentials.");
+                    return;
                }
+
+               const data = await response.json();
+               const user_id = data.user_id;
+
+               setUserId(user_id);
+
+               console.log("Current user_id:", user_id);
+
+               // Pass the userId using the state object in the navigate function
+               navigate("/", { state: { userId } });
           } catch (error) {
                console.error("Error during login:", error.message);
+               // Show an alert for other errors
+               alert(
+                    "An unexpected error occurred during login. Please try again."
+               );
           }
      };
 
