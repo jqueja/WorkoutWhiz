@@ -106,9 +106,9 @@ function EditSettings({ onUpdate, ...props }) {
                                    </Form.Group>
 
                                    <Form.Group as={Col} controlId="formDOB">
-                                        <Form.Label>Date of Birth</Form.Label>
+                                        <Form.Label>Birthday</Form.Label>
                                         <Form.Control
-                                             placeholder="dd/mm/yy"
+                                             type="date"
                                              value={dob}
                                              onChange={(e) =>
                                                   setDob(e.target.value)

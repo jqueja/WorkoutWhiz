@@ -5,25 +5,38 @@ import Container from "@material-ui/core/Container";
 import "./WorkoutCard.scss";
 
 // Create content in card
-function CardTable(props) {
-     // map data into rows by workoutName
-     const rows = props.item.map((row, index) => {
-          return (
-               <tr key={index}>
-                    <td>{row.workoutName}</td>
-                    <td>{row.weight}</td>
-                    <td>{row.sets}</td>
-                    <td>{row.reps}</td>
-               </tr>
-          );
-     });
-     return rows;
-}
+// function CardTable(props) {
+//      console.log(props.item);
+//      // Check if props.item is an array
+//      if (!Array.isArray(props.item)) {
+//           console.error("props.item is not an array:", props.item);
+//           return null; // or handle it in some way that makes sense for your application
+//      }
+//      // map data into rows by workoutName
+//      const rows = props.item.map((row, index) => {
+//           return (
+//                <tr key={index}>
+//                     <td>{row.workoutName}</td>
+//                     <td>{row.weight}</td>
+//                     <td>{row.sets}</td>
+//                     <td>{row.reps}</td>
+//                </tr>
+//           );
+//      });
+//      return rows;
+// }
 
 function WorkoutCard(props) {
      const date = props.date;
+
      return (
-          <Container style={{ marginTop: "1rem" }}>
+          <Container
+               style={{
+                    marginTop: "1rem",
+                    paddingLeft: "0px",
+                    paddingRight: "0px",
+               }}
+          >
                <Card>
                     <Card.Body style={{ padding: "0.4rem" }}>
                          <Card.Title
@@ -34,35 +47,32 @@ function WorkoutCard(props) {
                          >
                               {date}
                          </Card.Title>
-                         <Card.Text>
-                              <Table>
-                                   <thead>
+                         <Table>
+                              <thead>
+                                   <tr>
+                                        <th style={{ width: "35%" }}>
+                                             Exercise
+                                        </th>
+                                        <th style={{ width: "15%" }}>Weight</th>
+                                        <th style={{ width: "10%" }}>Sets</th>
+                                        <th style={{ width: "10%" }}>Reps</th>
+                                   </tr>
+                              </thead>
+                              <tbody>
+                                   {props.item && (
                                         <tr>
-                                             <th style={{ width: "40%" }}>
-                                                  Workout
-                                             </th>
-                                             <th style={{ width: "10%" }}>
-                                                  Weight
-                                             </th>
-                                             <th style={{ width: "10%" }}>
-                                                  Sets
-                                             </th>
-                                             <th style={{ width: "10%" }}>
-                                                  Reps
-                                             </th>
+                                             <td>{props.item.lift_name}</td>
+                                             <td>{props.item.weight}</td>
+                                             <td>{props.item.sets}</td>
+                                             <td>{props.item.reps}</td>
                                         </tr>
-                                   </thead>
-
-                                   <tbody>
-                                        <CardTable
-                                             item={props.item}
-                                        ></CardTable>
-                                   </tbody>
-                              </Table>
-                         </Card.Text>
+                                   )}
+                              </tbody>
+                         </Table>
                     </Card.Body>
                </Card>
           </Container>
      );
 }
+
 export default WorkoutCard;

@@ -32,11 +32,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 app.include_router(settings.router)
+<<<<<<< HEAD
 app.include_router(login.router)
+=======
+# app.include_router(login.router)
+# app.include_router(login.router)
+>>>>>>> 67641a844335d6e0e7c7ebd0059bf8d862101dcb
 app.include_router(signup.router)
 # app.include_router(info.router)
-# app.include_router(workouts.router)
+app.include_router(workouts.router)
 
 @app.exception_handler(exceptions.RequestValidationError)
 @app.exception_handler(ValidationError)
