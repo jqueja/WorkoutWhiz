@@ -22,9 +22,9 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
      const [date, setDate] = useState("");
      const [weightData, setWeightData] = useState({
           workoutName: "",
-          weight: "",
-          reps: "",
-          sets: "",
+          weight: 0,
+          reps: 0,
+          sets: 0,
      });
 
      const updateField = (e) => {
@@ -74,14 +74,15 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                const newWorkoutData = {
                     date: date,
                     lift_name: weightData.workoutName, // match the field name
-                    weight: weightData.weight.toString(), // convert to string
-                    reps: weightData.reps.toString(), // convert to string
-                    sets: weightData.sets.toString(), // convert to string
+                    weight: parseInt(weightData.weight),
+                    reps: parseInt(weightData.reps),
+                    sets: parseInt(weightData.sets),
                };
+               // console.log("New weight data", weightData);
+               // console.log("New Workout data", newWorkoutData);
+               handleLogWorkoutSubmit(newWorkoutData);
 
-               handleLogWorkoutSubmit();
                handleClose();
-               console.log(newWorkoutData);
           }
      };
 

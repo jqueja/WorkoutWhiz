@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from datetime import date, datetime
 import sqlalchemy
 from src import database as db
+from uuid import UUID
+
 
 router = APIRouter(
     prefix="/workouts",
@@ -10,7 +12,7 @@ router = APIRouter(
 )
 
 @router.get("/{user_id}")
-def display_workouts_info(user_id: int):
+def display_workouts_info(user_id: UUID):
     with db.engine.begin() as connection:
         result = connection.execute(sqlalchemy.text(
             """
@@ -42,12 +44,12 @@ def display_workouts_info(user_id: int):
 class UserWorkouts(BaseModel):
     date: date
     lift_name: str
-    weight: str
-    sets: str
-    reps: str
+    weight: int
+    sets: int
+    reps: int
 
 @router.post("/{user_id}/update")
-def update_workouts_info(user_id: int, userWorkouts: UserWorkouts):
+def update_workouts_info(user_id: UUID, userWorkouts: UserWorkouts):
     with db.engine.begin() as connection:
         result_id = connection.execute(sqlalchemy.text(
             """

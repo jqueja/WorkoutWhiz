@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import sqlalchemy
 from src import database as db
 from datetime import date
+from uuid import UUID
 
 router = APIRouter(
     prefix="/settings",
@@ -13,29 +14,29 @@ router = APIRouter(
 class UserSettings(BaseModel):
     first_name: str = None
     last_name: str = None
-    dob: str = None
-    age: str = None
+    dob: date = None
+    age: int = None
     gender: str = None
-    weight: str = None
-    height_ft: str = None
+    weight: int = None
+    height: int = None
 
-@router.get("/{user_id}")
-def settings_info(user_id: int):
+@router.get("/{id}")
+def settings_info(id: UUID):
     with db.engine.begin() as connection:
         result = connection.execute(sqlalchemy.text(
             """
-            SELECT user_id, first_name, last_name, weight, age, gender, dob, height
+            SELECT id, first_name, last_name, weight, age, gender, dob, height
             FROM users
-            WHERE user_id = :user_id
+            WHERE id = :id
             """
-        ), {"user_id": user_id}).first()
+        ), {"id": id}).first()
 
     if result is None:
         # Raise an HTTPException with a 404 status code and an error message
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     return {
-        "user_id": result.user_id, 
+        "id": result.id, 
         "first_name": result.first_name,
         "last_name": result.last_name,
         "weight": result.weight,
@@ -44,16 +45,17 @@ def settings_info(user_id: int):
         "dob": result.dob,
         "height": result.height
     }
-
 @router.post("/update/{user_id}")
 def update_user_settings(
-    user_id: int, 
+    user_id: UUID, 
     settings: UserSettings
 ):
     with db.engine.begin() as connection:
         # Build the SET clause based on provided fields
+        current_date = date.today()
         set_clause = ", ".join(
-            f"{field} = :{field}" for field, value in settings.dict().items() if value is not None
+            f"{field} = :{field}" for field, value in settings.dict().items() 
+            if value not in ["string", current_date, 0] and field != 'id'
         )
 
         # Update the user settings
@@ -61,7 +63,7 @@ def update_user_settings(
             f"""
             UPDATE users
             SET {set_clause}
-            WHERE user_id = :user_id
+            WHERE id = :user_id
             """
         ), {"user_id": user_id, **settings.dict()})
 
