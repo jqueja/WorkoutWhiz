@@ -19,10 +19,10 @@ function Settings() {
           first_name: "",
           last_name: "",
           dob: "",
-          age: "",
+          age: 0,
           gender: "",
-          weight: "",
-          height_ft: "",
+          weight: 0,
+          height_ft: 0,
      });
 
      const handleUpdate = async (updatedSettings) => {
@@ -87,9 +87,17 @@ function Settings() {
           }
      };
 
-     useEffect(() => {
-          fetchUserSettings();
-     }, [userId]);
+     useEffect(
+          () => {
+               fetchUserSettings();
+               console.log("HERE", userSettings);
+          },
+          [userId],
+          userSettings
+     );
+
+     // fetchUserSettings();
+     // console.log("userSettings", userSettings);
 
      return (
           <motion.div
@@ -111,6 +119,7 @@ function Settings() {
                     <EditSettings
                          onUpdate={handleUpdate}
                          style={{ margin: "0" }}
+                         data={userSettings}
                     />
                </Container>
                <Container>

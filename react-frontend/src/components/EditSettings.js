@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
@@ -11,16 +11,30 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 function EditSettings({ onUpdate, ...props }) {
+     const userData = props.data;
      const [show, setShow] = useState(false);
-     const [first_name, setFirstName] = useState("");
-     const [last_name, setLastName] = useState("");
-     const [dob, setDob] = useState("");
-     const [age, setAge] = useState("");
-     const [gender, setGender] = useState("");
-     const [weight, setWeight] = useState("");
-     const [height, setHeight] = useState("");
+
+     const [first_name, setFirstName] = useState(userData.first_name);
+     const [last_name, setLastName] = useState(userData.last_name);
+     const [dob, setDob] = useState(userData.dob);
+     const [age, setAge] = useState(userData.age);
+     const [gender, setGender] = useState(userData.gender);
+     const [weight, setWeight] = useState(userData.weight);
+     const [height, setHeight] = useState(userData.height);
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
+
+     useEffect(() => {
+          // set initial values
+          console.log("UserDataHere", userData);
+          setDob(userData.dob);
+          setGender(userData.gender);
+          setAge(userData.age);
+          setWeight(userData.weight);
+          setFirstName(userData.first_name);
+          setHeight(userData.height);
+          setLastName(userData.last_name);
+     }, [userData]);
 
      const handleSubmit = (event) => {
           event.preventDefault();
@@ -48,7 +62,7 @@ function EditSettings({ onUpdate, ...props }) {
                     placement="bottom"
                     show={show}
                     onHide={handleClose}
-                    {...props}
+                    //{...props}
                     style={{ height: "25rem" }}
                >
                     <Offcanvas.Header closeButton>
