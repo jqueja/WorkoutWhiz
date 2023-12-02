@@ -52,12 +52,13 @@ def update_user_settings(
 ):
     with db.engine.begin() as connection:
         # Build the SET clause based on provided fields
+        
         current_date = date.today()
         set_clause = ", ".join(
             f"{field} = :{field}" for field, value in settings.dict().items() 
-            if value not in ["string", current_date, 0] and field != 'id'
+            if value not in ["string", current_date, 0, None] and field != 'id'
         )
-
+        print(set_clause)
         # Update the user settings
         result = connection.execute(sqlalchemy.text(
             f"""
