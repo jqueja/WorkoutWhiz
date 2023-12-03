@@ -197,7 +197,7 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                                              Weight
                                         </Form.Label>
                                         <Form.Control
-                                             placeholder="lbs"
+                                             placeholder="kgs"
                                              name="weight"
                                              type="number"
                                              min="0"
