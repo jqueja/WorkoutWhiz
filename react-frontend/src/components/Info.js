@@ -50,14 +50,42 @@ function Info() {
           // Convert weight, height, and age to numbers
           const weight = parseInt(formData.weight, 10);
           const height = parseInt(formData.height, 10);
-          const age = parseInt(formData.age, 10);
+          // const age = parseInt(formData.age, 10);
+          // Calculate age based on the provided date of birth
+          const dob = new Date(formData.dob);
+          const today = new Date();
+          if (dob > today) {
+               alert("Please select a date before the current date.");
+               setEnableButton(false);
+               return;
+          }
+
+          // Calculate age based on the provided date of birth
+          const calculatedAge = today.getFullYear() - dob.getFullYear();
+
+          // Check if age is over 105
+          if (calculatedAge > 105) {
+               alert("Please enter a valid date of birth.");
+               setEnableButton(false);
+               return;
+          }
+
+          // Check if height and weight are greater than 0
+          if (height <= 0 || weight <= 0) {
+               alert("Please enter valid height and weight values.");
+               setEnableButton(false);
+               return;
+          }
+
+          // If all checks pass, enable the submit button
+          setEnableButton(true);
 
           // Log the request body before sending the request
           const requestBody = {
                id: formattedUserId,
                weight: weight,
                height: height,
-               age: age,
+               age: calculatedAge,
                gender: formData.gender,
                dob: formData.dob,
           };
@@ -78,7 +106,7 @@ function Info() {
                                    id: formattedUserId,
                                    weight: parseInt(formData.weight, 10), // Corrected the typo
                                    height: parseInt(formData.height, 10), // Convert height to an integer
-                                   age: parseInt(formData.age, 10), // Convert age to an integer
+                                   age: parseInt(calculatedAge, 10), // Convert age to an integer
                                    gender: formData.gender,
                                    dob: formData.dob,
                               }),
@@ -145,20 +173,6 @@ function Info() {
                                                        onChange={handleChange}
                                                        required
                                                   />{" "}
-                                             </Form.Group>
-
-                                             <Form.Group
-                                                  as={Col}
-                                                  controlId="formAge"
-                                             >
-                                                  <Form.Label>Age</Form.Label>
-                                                  <Form.Control
-                                                       required
-                                                       type="number"
-                                                       name="age"
-                                                       value={formData.age}
-                                                       onChange={handleChange}
-                                                  />
                                              </Form.Group>
                                         </Row>
                                         <Row className="mb-3">
