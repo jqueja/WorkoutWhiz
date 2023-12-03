@@ -29,6 +29,21 @@ These steps are required for any type of deployment when first accessing the sou
 
      Go to http://127.0.0.1:5000/
 
+4. `Setting up E2E testing and install required dependencies`
+
+     Initiate backend
+
+     ```
+     cd cypress
+     npm i
+     npm run cy:open
+     ```
+
+     Navigate to E2E testing
+     Click Chrome
+     Start E2E testing in Chrome
+     On Specs, click on (insert page).cy.js to see test run
+
 ## Contributing
 
 ### Coding Standards
