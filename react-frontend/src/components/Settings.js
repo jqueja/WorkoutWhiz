@@ -14,6 +14,10 @@ function Settings() {
 
      const { userId } = useUser();
      console.log("Current userId:", userId);
+     console.log(userId);
+     if (userId === null) {
+          navigate("/login");
+     }
 
      const [userSettings, setUserSettings] = useState({
           first_name: "",
@@ -84,6 +88,7 @@ function Settings() {
                }
           } catch (error) {
                console.error("Error fetching user settings:", error.message);
+               navigate("/login");
           }
      };
 

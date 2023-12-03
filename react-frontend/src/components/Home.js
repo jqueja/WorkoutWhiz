@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import WorkoutCard from "./WorkoutCard";
 import LogWorkout from "./LogWorkout";
 import Container from "@material-ui/core/Container";
@@ -8,6 +9,13 @@ import { motion } from "framer-motion";
 function Home() {
      const [workoutData, setWorkoutData] = useState([]);
      const { userId } = useUser();
+
+     const navigate = useNavigate();
+
+     console.log("Home no_id: ", userId);
+     if (userId === null) {
+          navigate("/login");
+     }
 
      const fetchWorkouts = async () => {
           try {
@@ -32,6 +40,7 @@ function Home() {
                setWorkoutData(data);
           } catch (error) {
                console.error(error);
+               navigate("/login");
           }
      };
 
