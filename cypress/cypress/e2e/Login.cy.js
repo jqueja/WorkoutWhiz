@@ -13,37 +13,42 @@ describe("Login Page", () => {
 
           // Assert that navigation occurred after successful login
           cy.url().should("eq", "http://localhost:3000/");
-     });
-     it("should open LogWorkout and verify form elements", () => {
+
+          // Check if the home page is displayed
+          cy.get(".page-header").should("contain", "My Workout Log");
+
+          // Check if
+          cy.get(
+               'button.btn.btn-primary[style="height: 3rem; width: 3rem; padding: 0rem; background: rgb(246, 88, 88); border-color: rgb(246, 88, 88);"]'
+          ).should("exist");
           // Open LogWorkout
-          cy.get("button.page-icon").click();
+          cy.get(
+               'button.btn.btn-primary[style="height: 3rem; width: 3rem; padding: 0rem; background: rgb(246, 88, 88); border-color: rgb(246, 88, 88);"]'
+          ).click();
 
           // Verify the form elements
-          cy.get('[name="date"]').should("exist");
-          cy.get('[name="workoutName"]').should("exist");
-          cy.get('[name="weight"]').should("exist");
-          cy.get('[name="sets"]').should("exist");
-          cy.get('[name="reps"]').should("exist");
+          cy.get('input[name="date"]').should("exist");
+          cy.get('input[name="workoutName"]').should("exist");
+          cy.get('input[name="weight"]').should("exist");
+          cy.get('input[name="sets"]').should("exist");
+          cy.get('input[name="reps"]').should("exist");
           cy.get('button[type="submit"]').should("exist");
-     });
-
-     it("should log a workout successfully", () => {
-          // Open LogWorkout
-          cy.get("button").contains("Log Workout").click();
 
           // Fill in the workout details
-          cy.get('[name="date"]').type("2023-01-01");
-          cy.get('[name="workoutName"]').type("Bench Press");
-          cy.get('[name="weight"]').type("100");
-          cy.get('[name="sets"]').type("3");
-          cy.get('[name="reps"]').type("10");
-
-          // Submit the form
-          cy.get('button[type="submit"]').click();
+          cy.get('input[name="date"]').type("2023-01-01");
+          cy.get('input[name="workoutName"]').type("Bench Press");
+          cy.get('input[name="weight"]').type("100");
+          cy.get('input[name="sets"]').type("3");
+          cy.get('input[name="reps"]').type("10");
 
           // Check if the workout is successfully logged
-          // You might need to adjust these assertions based on your actual application behavior
           cy.get(".alert").should("not.exist"); // Check if there are no error alerts
-          cy.get(".WorkoutCard").should("exist"); // Check if the new workout card is displayed
+
+          // Verify the close button
+          cy.get('button.btn-close[aria-label="Close"]').should("exist");
+          cy.get('button.btn-close[aria-label="Close"]').click();
+
+          // Check if the new workout card is displayed
+          cy.get(".WorkoutCard").should("exist");
      });
 });
