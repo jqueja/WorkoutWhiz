@@ -1,12 +1,8 @@
-import React from "react";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
-
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
@@ -14,32 +10,62 @@ function EditSettings({ onUpdate, ...props }) {
      const userData = props.data;
      const [show, setShow] = useState(false);
 
-     const [first_name, setFirstName] = useState(userData.first_name);
-     const [last_name, setLastName] = useState(userData.last_name);
-     const [dob, setDob] = useState(userData.dob);
-     const [age, setAge] = useState(userData.age);
-     const [gender, setGender] = useState(userData.gender);
-     const [weight, setWeight] = useState(userData.weight);
-     const [height, setHeight] = useState(userData.height);
+     const calculateAge = (dob) => {
+          const today = new Date();
+          const birthDate = new Date(dob);
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+
+          if (
+               monthDiff < 0 ||
+               (monthDiff === 0 && today.getDate() < birthDate.getDate())
+          ) {
+               age--;
+          }
+
+          return age;
+     };
+
+     const [formData, setFormData] = useState({
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          dob: userData.dob,
+          age: calculateAge(userData.dob), // Calculate age based on dob
+          gender: userData.gender,
+          weight: userData.weight,
+          height: userData.height,
+     });
+
      const handleClose = () => setShow(false);
      const handleShow = () => setShow(true);
 
-     useEffect(() => {
-          // set initial values
-          console.log("UserDataHere", userData);
-          setDob(userData.dob);
-          setGender(userData.gender);
-          setAge(userData.age);
-          setWeight(userData.weight);
-          setFirstName(userData.first_name);
-          setHeight(userData.height);
-          setLastName(userData.last_name);
-     }, [userData]);
+     const handleSubmit = (e) => {
+          e.preventDefault();
 
-     const handleSubmit = (event) => {
-          event.preventDefault();
-          // Assuming the form submission is successful
-          onUpdate({ first_name, last_name, dob, age, gender, weight, height });
+          const updatedData = {
+               first_name: formData.first_name,
+               last_name: formData.last_name,
+               dob: formData.dob,
+               age: formData.age,
+               gender: formData.gender,
+               weight: formData.weight,
+               height: formData.height,
+          };
+
+          // Identify the changed field
+          const changedField = Object.keys(updatedData).find(
+               (key) => updatedData[key] !== userData[key]
+          );
+
+          if (!changedField) {
+               // No changes, close the form
+               handleClose();
+               return;
+          }
+
+          // Only update the changed field
+          const fieldToUpdate = { [changedField]: updatedData[changedField] };
+          onUpdate(fieldToUpdate);
           handleClose();
      };
 
@@ -62,7 +88,6 @@ function EditSettings({ onUpdate, ...props }) {
                     placement="bottom"
                     show={show}
                     onHide={handleClose}
-                    //{...props}
                     style={{ height: "25rem" }}
                >
                     <Offcanvas.Header closeButton>
@@ -78,22 +103,26 @@ function EditSettings({ onUpdate, ...props }) {
                                         <Col>
                                              <Form.Control
                                                   placeholder="First name"
-                                                  value={first_name}
+                                                  value={formData.first_name}
                                                   onChange={(e) =>
-                                                       setFirstName(
-                                                            e.target.value
-                                                       )
+                                                       setFormData({
+                                                            ...formData,
+                                                            first_name:
+                                                                 e.target.value,
+                                                       })
                                                   }
                                              />
                                         </Col>
                                         <Col>
                                              <Form.Control
                                                   placeholder="Last name"
-                                                  value={last_name}
+                                                  value={formData.last_name}
                                                   onChange={(e) =>
-                                                       setLastName(
-                                                            e.target.value
-                                                       )
+                                                       setFormData({
+                                                            ...formData,
+                                                            last_name:
+                                                                 e.target.value,
+                                                       })
                                                   }
                                              />
                                         </Col>
@@ -103,9 +132,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Form.Group as={Col} controlId="formGender">
                                         <Form.Label>Gender</Form.Label>
                                         <Form.Select
-                                             value={gender}
+                                             value={formData.gender}
                                              onChange={(e) =>
-                                                  setGender(e.target.value)
+                                                  setFormData({
+                                                       ...formData,
+                                                       gender: e.target.value,
+                                                  })
                                              }
                                         >
                                              <option>Select</option>
@@ -123,19 +155,15 @@ function EditSettings({ onUpdate, ...props }) {
                                         <Form.Label>Birthday</Form.Label>
                                         <Form.Control
                                              type="date"
-                                             value={dob}
+                                             value={formData.dob}
                                              onChange={(e) =>
-                                                  setDob(e.target.value)
-                                             }
-                                        />
-                                   </Form.Group>
-
-                                   <Form.Group as={Col} controlId="formAge">
-                                        <Form.Label>Age</Form.Label>
-                                        <Form.Control
-                                             value={age}
-                                             onChange={(e) =>
-                                                  setAge(e.target.value)
+                                                  setFormData({
+                                                       ...formData,
+                                                       dob: e.target.value,
+                                                       age: calculateAge(
+                                                            e.target.value
+                                                       ),
+                                                  })
                                              }
                                         />
                                    </Form.Group>
@@ -144,9 +172,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Form.Group as={Col} controlId="formWeight">
                                         <Form.Label>Weight</Form.Label>
                                         <Form.Control
-                                             value={weight}
+                                             value={formData.weight}
                                              onChange={(e) =>
-                                                  setWeight(e.target.value)
+                                                  setFormData({
+                                                       ...formData,
+                                                       weight: e.target.value,
+                                                  })
                                              }
                                         />
                                    </Form.Group>
@@ -154,9 +185,12 @@ function EditSettings({ onUpdate, ...props }) {
                                    <Form.Group as={Col} controlId="formHeight">
                                         <Form.Label>Height</Form.Label>
                                         <Form.Control
-                                             value={height}
+                                             value={formData.height}
                                              onChange={(e) =>
-                                                  setHeight(e.target.value)
+                                                  setFormData({
+                                                       ...formData,
+                                                       height: e.target.value,
+                                                  })
                                              }
                                         />
                                    </Form.Group>
@@ -185,4 +219,6 @@ function EditSettings({ onUpdate, ...props }) {
           </>
      );
 }
+
 export default EditSettings;
+
