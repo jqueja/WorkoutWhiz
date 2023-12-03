@@ -27,7 +27,8 @@ function CardTable(props) {
 }
 
 function WorkoutCard(props) {
-     const date = props.date;
+     const date = new Date(props.date);
+     const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
      return (
           <Container
@@ -45,7 +46,9 @@ function WorkoutCard(props) {
                                    fontFamily: "M PLUS 1",
                               }}
                          >
-                              {date}
+                              {/* Formatting date title of card */}
+                              {dayNames[date.getDay()]} {date.getMonth()}/
+                              {date.getDate()}/{date.getFullYear() % 1000}
                          </Card.Title>
                          <Table>
                               <thead>

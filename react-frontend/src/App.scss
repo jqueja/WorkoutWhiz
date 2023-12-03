@@ -16,6 +16,14 @@
     width: 100%;
 }
 
+.page-body{
+  top:50px !important;
+  bottom: 80px  !important;
+  overflow-y: scroll !important;
+  position: absolute !important;
+}
+
+
 html, body {
   overflow-x: hidden;
   scroll-behavior: smooth;
