@@ -3,6 +3,8 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Container from "@material-ui/core/Container";
 import "./WorkoutCard.scss";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Button from "react-bootstrap/Button";
 
 //Create content in card
 function CardTable(props) {
@@ -11,6 +13,24 @@ function CardTable(props) {
      const rows = props.item.map((row, index) => {
           return (
                <tr key={index}>
+                    <td>
+                         <Button
+                              style={{
+                                   height: "15px",
+                                   width: "15px",
+                              }}
+                              className="btn btn-outline-primary custom-outline-primary-btn"
+                              onClick={props.handleRemove}
+                         >
+                              <RemoveIcon
+                                   style={{
+                                        fontSize: "10px",
+                                        height: "12px",
+                                        width: "12px",
+                                   }}
+                              />
+                         </Button>
+                    </td>
                     <td>{row.lift_name}</td>
                     <td>{row.weight}</td>
                     <td>{row.sets}</td>
@@ -24,7 +44,9 @@ function CardTable(props) {
 function WorkoutCard(props) {
      const date = new Date(props.date);
      const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-     console.log(props.item);
+     const handleRemove = () => {
+          console.log("remove workout button has been clicked");
+     };
 
      return (
           <Container
@@ -49,6 +71,7 @@ function WorkoutCard(props) {
                          <Table>
                               <thead>
                                    <tr>
+                                        <th style={{ width: "4%" }}> </th>
                                         <th style={{ width: "35%" }}>
                                              Exercise
                                         </th>
@@ -58,7 +81,10 @@ function WorkoutCard(props) {
                                    </tr>
                               </thead>
                               <tbody>
-                                   <CardTable item={props.item} />
+                                   <CardTable
+                                        item={props.item}
+                                        handleRemove={handleRemove}
+                                   />
                               </tbody>
                          </Table>
                     </Card.Body>
