@@ -28,12 +28,11 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Container
-                                                  style={{ marginTop: "4rem" }}
-                                             >
-                                                  <Home />
-                                             </Container>
-
+                                             <div className="page-body">
+                                                  <Container>
+                                                       <Home />
+                                                  </Container>
+                                             </div>
                                              <NavHeader page={"home"} />
                                         </React.Fragment>
                                    }
@@ -45,9 +44,7 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Container
-                                                  style={{ marginTop: "4rem" }}
-                                             >
+                                             <Container className="page-body">
                                                   <Music />
                                              </Container>{" "}
                                              <NavHeader page={"music"} />
@@ -61,9 +58,7 @@ function App() {
                                              <div className="gradient-header-background">
                                                   WORKOUT WHIZ
                                              </div>
-                                             <Container
-                                                  style={{ marginTop: "4rem" }}
-                                             >
+                                             <Container className="page-body">
                                                   <Settings />
                                              </Container>
                                              <NavHeader page={"settings"} />

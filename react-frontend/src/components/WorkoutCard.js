@@ -3,31 +3,50 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Container from "@material-ui/core/Container";
 import "./WorkoutCard.scss";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Button from "react-bootstrap/Button";
 
-// Create content in card
-// function CardTable(props) {
-//      console.log(props.item);
-//      // Check if props.item is an array
-//      if (!Array.isArray(props.item)) {
-//           console.error("props.item is not an array:", props.item);
-//           return null; // or handle it in some way that makes sense for your application
-//      }
-//      // map data into rows by workoutName
-//      const rows = props.item.map((row, index) => {
-//           return (
-//                <tr key={index}>
-//                     <td>{row.workoutName}</td>
-//                     <td>{row.weight}</td>
-//                     <td>{row.sets}</td>
-//                     <td>{row.reps}</td>
-//                </tr>
-//           );
-//      });
-//      return rows;
-// }
+//Create content in card
+function CardTable(props) {
+     console.log(props.item);
+     // map data into rows by workoutName
+     const rows = props.item.map((row, index) => {
+          return (
+               <tr key={index}>
+                    <td>
+                         <Button
+                              style={{
+                                   height: "15px",
+                                   width: "15px",
+                              }}
+                              className="btn btn-outline-primary custom-outline-primary-btn"
+                              onClick={props.handleRemove}
+                         >
+                              <RemoveIcon
+                                   style={{
+                                        fontSize: "10px",
+                                        height: "12px",
+                                        width: "12px",
+                                   }}
+                              />
+                         </Button>
+                    </td>
+                    <td>{row.lift_name}</td>
+                    <td>{row.weight}</td>
+                    <td>{row.sets}</td>
+                    <td>{row.reps}</td>
+               </tr>
+          );
+     });
+     return rows;
+}
 
 function WorkoutCard(props) {
-     const date = props.date;
+     const date = new Date(props.date);
+     const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+     const handleRemove = () => {
+          console.log("remove workout button has been clicked");
+     };
 
      return (
           <Container
@@ -45,11 +64,14 @@ function WorkoutCard(props) {
                                    fontFamily: "M PLUS 1",
                               }}
                          >
-                              {date}
+                              {/* Formatting date title of card */}
+                              {dayNames[date.getDay()]} {date.getMonth() + 1}/
+                              {date.getDate() + 1}/{date.getFullYear() % 1000}
                          </Card.Title>
                          <Table>
                               <thead>
                                    <tr>
+                                        <th style={{ width: "4%" }}> </th>
                                         <th style={{ width: "35%" }}>
                                              Exercise
                                         </th>
@@ -59,14 +81,10 @@ function WorkoutCard(props) {
                                    </tr>
                               </thead>
                               <tbody>
-                                   {props.item && (
-                                        <tr>
-                                             <td>{props.item.lift_name}</td>
-                                             <td>{props.item.weight}</td>
-                                             <td>{props.item.sets}</td>
-                                             <td>{props.item.reps}</td>
-                                        </tr>
-                                   )}
+                                   <CardTable
+                                        item={props.item}
+                                        handleRemove={handleRemove}
+                                   />
                               </tbody>
                          </Table>
                     </Card.Body>

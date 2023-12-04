@@ -24,9 +24,11 @@ def display_workouts_info(user_id: UUID):
         ), {"user_id": user_id}).fetchall()
 
 
-    if result == []:
+    if not result:
         # Raise an HTTPException with a 404 status code and an error message
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        #raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        return {"message": "No workouts found for the user", "user_id": str(user_id)}
+
     
     final_array = []
     for exercise in result:
