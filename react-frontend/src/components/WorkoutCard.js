@@ -7,16 +7,11 @@ import "./WorkoutCard.scss";
 //Create content in card
 function CardTable(props) {
      console.log(props.item);
-     // Check if props.item is an array
-     if (!Array.isArray(props.item)) {
-          console.error("props.item is not an array:", props.item);
-          return null; // or handle it in some way that makes sense for your application
-     }
      // map data into rows by workoutName
      const rows = props.item.map((row, index) => {
           return (
                <tr key={index}>
-                    <td>{row.workoutName}</td>
+                    <td>{row.lift_name}</td>
                     <td>{row.weight}</td>
                     <td>{row.sets}</td>
                     <td>{row.reps}</td>
@@ -29,6 +24,7 @@ function CardTable(props) {
 function WorkoutCard(props) {
      const date = new Date(props.date);
      const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+     console.log(props.item);
 
      return (
           <Container
@@ -47,8 +43,8 @@ function WorkoutCard(props) {
                               }}
                          >
                               {/* Formatting date title of card */}
-                              {dayNames[date.getDay()]} {date.getMonth()}/
-                              {date.getDate()}/{date.getFullYear() % 1000}
+                              {dayNames[date.getDay()]} {date.getMonth() + 1}/
+                              {date.getDate() + 1}/{date.getFullYear() % 1000}
                          </Card.Title>
                          <Table>
                               <thead>
@@ -62,14 +58,7 @@ function WorkoutCard(props) {
                                    </tr>
                               </thead>
                               <tbody>
-                                   {props.item && (
-                                        <tr>
-                                             <td>{props.item.lift_name}</td>
-                                             <td>{props.item.weight}</td>
-                                             <td>{props.item.sets}</td>
-                                             <td>{props.item.reps}</td>
-                                        </tr>
-                                   )}
+                                   <CardTable item={props.item} />
                               </tbody>
                          </Table>
                     </Card.Body>
