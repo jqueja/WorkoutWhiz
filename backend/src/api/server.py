@@ -2,7 +2,7 @@ from fastapi import FastAPI, exceptions
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
-from src.api import settings, login, signup, info, workouts
+from src.api import settings, login, signup, info, workouts, music
 import json
 import logging
 import sys
@@ -40,6 +40,7 @@ app.include_router(login.router)
 app.include_router(signup.router)
 # app.include_router(info.router)
 app.include_router(workouts.router)
+app.include_router(music.router)
 
 @app.exception_handler(exceptions.RequestValidationError)
 @app.exception_handler(ValidationError)
