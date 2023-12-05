@@ -5,7 +5,7 @@ from src import database as db
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
 from uuid import UUID
-
+import re
 load_dotenv()
 
 import os
@@ -27,7 +27,36 @@ class MusicRequest(BaseModel):
     user_id: UUID
     link: str
 
-@router.post("/add-music")
+
+uuid_pattern = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
+
+@router.get("/all-links/{user_id}")
+def get_music_list(user_id):
+
+    if not uuid_pattern.match(user_id):
+        raise HTTPException(status_code=400, detail="Invalid UUID format")
+
+    with db.engine.begin() as connection:
+        result = connection.execute(
+            sqlalchemy.text(
+            """
+            SELECT link
+            FROM music_links
+            WHERE "user" = :user_id
+            """),
+            {"user_id": user_id}
+        )
+
+    playlists = [row[0] for row in result.fetchall()]
+
+    # If no links are found, raise a 404 Not Found exception
+    if not playlists:
+        raise HTTPException(status_code=404, detail="No music links found for the specified user")
+
+    return {"playlist_links": playlists}
+
+
+@router.post("/add-music/{user_id}/{link}")
 def add_music(request: MusicRequest):
 
     # Checks for duplications in the database
@@ -60,7 +89,7 @@ def add_music(request: MusicRequest):
 
     return "OK"
 
-@router.post("/delete-music")
+@router.post("/delete-music/{user_id}/{link}")
 def delete_music(request: MusicRequest):
 
     # Checks if the record exists in the database
