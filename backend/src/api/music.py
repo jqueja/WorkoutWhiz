@@ -47,12 +47,47 @@ def add_music(request: MusicRequest):
     if existing_record:
         raise HTTPException(status_code=409, detail="Song is already associated with user")
 
+    # Add the song
     with db.engine.begin() as connection:
         result = connection.execute(
             sqlalchemy.text(
             """
             INSERT INTO music_links ("user", "link")
             VALUES (:user_id, :user_link)
+            """),
+            {"user_id": request.user_id, "user_link": request.link}
+        )
+
+    return "OK"
+
+@router.post("/delete-music")
+def delete_music(request: MusicRequest):
+
+    # Checks if the record exists in the database
+    with db.engine.begin() as connection:
+        record = connection.execute(
+            sqlalchemy.text(
+            """
+            SELECT *
+            FROM music_links
+            WHERE "user" = :user_id AND "link" = :user_link
+            """),
+            {"user_id": request.user_id, "user_link": request.link}
+        )
+
+    existing_record = record.fetchone()
+
+    # If the record does not exist, raise a 404 Not Found exception
+    if not existing_record:
+        raise HTTPException(status_code=404, detail="Song not found for the specified user")
+
+    # If the record exists, delete the song
+    with db.engine.begin() as connection:
+        result = connection.execute(
+            sqlalchemy.text(
+            """
+            DELETE FROM music_links
+            WHERE "user" = :user_id AND "link" = :user_link
             """),
             {"user_id": request.user_id, "user_link": request.link}
         )
