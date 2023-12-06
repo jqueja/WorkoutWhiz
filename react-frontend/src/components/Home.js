@@ -129,6 +129,7 @@ function Home() {
                key={card.date}
                date={card.date}
                item={card.weightlifting} // Pass the entire object to WorkoutCard
+               onRemove={fetchWorkouts}
           ></WorkoutCard>
      ));
      if (workoutData.length === 0) {
