@@ -51,12 +51,13 @@ def get_music_list(user_id):
 
     # If no links are found, raise a 404 Not Found exception
     if not playlists:
-        raise HTTPException(status_code=404, detail="No music links found for the specified user")
+        #raise HTTPException(status_code=404, detail="No music links found for the specified user")
+        return {"message": "No workouts found for the user", "user_id": str(user_id)}
 
     return {"playlist_links": playlists}
 
 
-@router.post("/add-music/{user_id}/{link}")
+@router.post("/add-music/{user_id}")
 def add_music(request: MusicRequest):
 
     # Checks for duplications in the database
@@ -89,7 +90,7 @@ def add_music(request: MusicRequest):
 
     return "OK"
 
-@router.post("/delete-music/{user_id}/{link}")
+@router.post("/delete-music/{user_id}")
 def delete_music(request: MusicRequest):
 
     # Checks if the record exists in the database

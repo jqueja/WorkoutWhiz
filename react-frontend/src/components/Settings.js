@@ -6,15 +6,15 @@ import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import "./Components.scss";
 
 function Settings() {
      const navigate = useNavigate();
 
      const { userId } = useUser();
-     console.log("Current userId:", userId);
-     console.log(userId);
+
      if (userId === null) {
           navigate("/login");
      }
@@ -127,26 +127,59 @@ function Settings() {
                          data={userSettings}
                     />
                </Container>
-               <Container>
-                    First Name: {userSettings.first_name}
-                    <br />
-                    Last Name: {userSettings.last_name}
-                    <br />
-                    Date of Birth: {userSettings.dob}
-                    <br />
-                    Age: {userSettings.age}
-                    <br />
-                    Gender: {userSettings.gender}
-                    <br />
-                    Weight: {userSettings.weight}
-                    <br />
-                    Height: {userSettings.height}
-                    <br />
+               <Container style={{ height: "70vh" }}>
+                    <div style={{ lineHeight: "2", fontSize: "21px" }}>
+                         <Row>
+                              <Col>
+                                   <b>First Name:</b>
+                              </Col>
+                              <Col>{userSettings.first_name}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Last Name:</b>
+                              </Col>
+                              <Col>{userSettings.last_name}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Date of Birth:</b>
+                              </Col>
+                              <Col>{userSettings.dob}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Age:</b>
+                              </Col>
+                              <Col>{userSettings.age}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Gender:</b>
+                              </Col>
+                              <Col>{userSettings.gender}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Weight:</b>
+                              </Col>
+                              <Col>{userSettings.weight}</Col>
+                         </Row>
+                         <Row>
+                              <Col>
+                                   <b>Height:</b>
+                              </Col>
+                              <Col>{userSettings.height}</Col>
+                         </Row>
+                    </div>
                     <Button
+                         size="lg"
                          style={{
                               background: "#F3A64B",
                               borderColor: "#F3A64B",
                               marginTop: "1.5rem",
+                              bottom: "0",
+                              position: "absolute",
                          }}
                          onClick={() => navigate("/logout")}
                     >

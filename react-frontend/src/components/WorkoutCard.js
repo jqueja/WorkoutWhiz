@@ -8,7 +8,6 @@ import Button from "react-bootstrap/Button";
 
 //Create content in card
 function CardTable(props) {
-     console.log(props.item);
      // map data into rows by workoutName
      const rows = props.item.map((row, index) => {
           return (
@@ -42,8 +41,9 @@ function CardTable(props) {
 }
 
 function WorkoutCard(props) {
-     const date = new Date(props.date);
      const dayNames = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+     const date = new Date(props.date + "T00:00:00");
+
      const handleRemove = () => {
           console.log("remove workout button has been clicked");
      };
@@ -66,7 +66,7 @@ function WorkoutCard(props) {
                          >
                               {/* Formatting date title of card */}
                               {dayNames[date.getDay()]} {date.getMonth() + 1}/
-                              {date.getDate() + 1}/{date.getFullYear() % 1000}
+                              {date.getDate()}/{date.getFullYear() % 1000}
                          </Card.Title>
                          <Table>
                               <thead>

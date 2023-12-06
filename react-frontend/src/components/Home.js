@@ -7,7 +7,6 @@ import { useUser } from "../UserContext";
 import { motion } from "framer-motion";
 
 function sortWorkouts(DBWorkoutData) {
-     console.log(DBWorkoutData);
      const workoutData = []; // organized workout data for frontend rendering
 
      for (let i = 0; i < DBWorkoutData.length; i++) {
@@ -47,7 +46,6 @@ function sortWorkouts(DBWorkoutData) {
                }
           }
      }
-     console.log("FINAL", workoutData);
 
      return workoutData;
 }
@@ -100,7 +98,6 @@ function Home() {
      }, []); // Run once when the component mounts
 
      const handleLogWorkoutSubmit = async (newWorkoutData) => {
-          console.log("LOGWORKOUTSUBMIT", newWorkoutData);
           try {
                const response = await fetch(
                     `http://127.0.0.1:8000/workouts/${userId}/update`,
@@ -122,13 +119,11 @@ function Home() {
                     );
                }
 
-               console.log("Workout updated successfully");
                fetchWorkouts();
           } catch (error) {
                console.error(error);
           }
      };
-
      const workoutCardList = workoutData.map((card) => (
           <WorkoutCard
                key={card.date}
