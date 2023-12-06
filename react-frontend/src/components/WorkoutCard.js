@@ -9,7 +9,6 @@ import Button from "react-bootstrap/Button";
 
 //Create content in card
 function CardTable(props) {
-     console.log("props.item", props.item);
      // map data into rows by workoutName
      const rows = props.item.map((row, index) => {
           return (

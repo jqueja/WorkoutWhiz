@@ -1,3 +1,4 @@
+$enable-validation-icons: false;
 @import "node_modules/bootstrap/scss/bootstrap";
 .page-icon{
   height: 1.5rem !important; 
@@ -9,4 +10,10 @@
   margin-top: 1rem;
   margin-bottom: 1.5rem;
   font-weight: 550;
+}
+
+
+// Override styles to hide validation icons
+.is-valid::after {
+  display: none !important;
 }
