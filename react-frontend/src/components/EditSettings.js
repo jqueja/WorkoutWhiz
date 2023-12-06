@@ -26,7 +26,6 @@ function EditSettings({ onUpdate, ...props }) {
 
      useEffect(() => {
           // set initial values
-          console.log("UserDataHere", userData);
           setDob(userData.dob);
           setGender(userData.gender);
           setAge(userData.age);

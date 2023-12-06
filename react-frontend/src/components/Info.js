@@ -80,18 +80,6 @@ function Info() {
           // If all checks pass, enable the submit button
           setEnableButton(true);
 
-          // Log the request body before sending the request
-          const requestBody = {
-               id: formattedUserId,
-               weight: weight,
-               height: height,
-               age: calculatedAge,
-               gender: formData.gender,
-               dob: formData.dob,
-          };
-
-          console.log("Request Body:", requestBody);
-
           setValidated(true);
           if (e.target.checkValidity() === true) {
                try {

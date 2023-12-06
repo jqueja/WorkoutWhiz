@@ -95,14 +95,10 @@ function Settings() {
      useEffect(
           () => {
                fetchUserSettings();
-               console.log("HERE", userSettings);
           },
           [userId],
           userSettings
      );
-
-     // fetchUserSettings();
-     // console.log("userSettings", userSettings);
 
      return (
           <motion.div

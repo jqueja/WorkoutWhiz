@@ -88,7 +88,7 @@ function Music(...props) {
                          uniqueURLPart +
                          "?utm_source=generator&theme=0";
 
-                    if (linkList.indexOf(spotifyEmbed) != -1) {
+                    if (linkList.indexOf(spotifyEmbed) !== -1) {
                          // check for repeat playlist
                          console.log("ALREADY HERE");
                          e.preventDefault();

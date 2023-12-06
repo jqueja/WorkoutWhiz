@@ -76,7 +76,6 @@ function NavIcon(props) {
 }
 
 function NavHeader(props) {
-     console.log(props.page);
      return (
           <Navbar className="gradient_nav_bar" data-bs-theme="dark">
                <Nav>

@@ -78,8 +78,6 @@ function LogWorkout({ handleLogWorkoutSubmit, ...props }) {
                     reps: parseInt(weightData.reps),
                     sets: parseInt(weightData.sets),
                };
-               // console.log("New weight data", weightData);
-               // console.log("New Workout data", newWorkoutData);
                handleLogWorkoutSubmit(newWorkoutData);
 
                handleClose();

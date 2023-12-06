@@ -60,7 +60,6 @@ function Home() {
 
      const navigate = useNavigate();
 
-     console.log("Home no_id: ", userId);
      if (userId === null) {
           navigate("/login");
      }
