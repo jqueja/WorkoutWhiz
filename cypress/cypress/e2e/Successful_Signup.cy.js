@@ -1,6 +1,7 @@
 describe("New User Sign Up", () => {
      beforeEach(() => {
           cy.visit("http://localhost:3000/login"); // Update the URL accordingly
+          cy.viewport("iphone-6");
      });
 
      it("should successfully sign up with valid credentials", () => {

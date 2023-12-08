@@ -3,6 +3,7 @@
 describe("Login Page", () => {
      beforeEach(() => {
           cy.visit("http://localhost:3000/login"); // Update the URL accordingly
+          // cy.viewport("iphone-6");
      });
 
      it("should display an error for invalid credentials", () => {

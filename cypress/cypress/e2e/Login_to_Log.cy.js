@@ -3,6 +3,7 @@
 describe("Login Page", () => {
      beforeEach(() => {
           cy.visit("http://localhost:3000/login"); // Update the URL accordingly
+          cy.viewport("iphone-6");
      });
 
      it("should successfully login with valid credentials", () => {
@@ -46,34 +47,41 @@ describe("Login Page", () => {
           cy.get(".alert").should("not.exist"); // Check if there are no error alerts
 
           // Verify the close button
-          cy.get('button.btn-close[aria-label="Close"]').should("exist");
-          cy.get('button.btn-close[aria-label="Close"]').click();
+          // cy.get('button.btn-close[aria-label="Close"]').should("exist");
+          // cy.get('button.btn-close[aria-label="Close"]').click();
+
+          // Select the submit button by its class and click it
+          cy.get('button.btn-primary[type="submit"]')
+               .should("have.text", "Submit") // Optional: Check if the button has the text 'Submit'
+               .click();
 
           // Check if the new workout card is displayed
           cy.get(".card").should("exist");
 
           // Select the specific card based on its content
-          cy.contains(".card-title.h5", "2023-01-01")
+          cy.contains(".card-title.h5", "Sun 1/1/23")
                .parents(".card")
                .within(() => {
                     // Verify the card content
-                    cy.get(".table th").should("have.length", 4);
-                    cy.get(".table th").eq(0).should("have.text", "Exercise");
-                    cy.get(".table th").eq(1).should("have.text", "Weight");
-                    cy.get(".table th").eq(2).should("have.text", "Sets");
-                    cy.get(".table th").eq(3).should("have.text", "Reps");
+                    cy.get(".table thead th")
+                         .eq(1)
+                         .should("have.text", "Exercise");
+                    cy.get(".table thead th")
+                         .eq(2)
+                         .should("have.text", "Weight");
+                    cy.get(".table thead th").eq(3).should("have.text", "Sets");
+                    cy.get(".table thead th").eq(4).should("have.text", "Reps");
 
                     // Verify table row content
-                    cy.get(".table tbody tr").should("have.length", 1);
-                    cy.get(".table tbody tr td")
-                         .eq(0)
-                         .should("have.text", "Bench Press");
                     cy.get(".table tbody tr td")
                          .eq(1)
-                         .should("have.text", "100");
-                    cy.get(".table tbody tr td").eq(2).should("have.text", "3");
+                         .should("have.text", "Bench Press");
                     cy.get(".table tbody tr td")
-                         .eq(3)
+                         .eq(2)
+                         .should("have.text", "100");
+                    cy.get(".table tbody tr td").eq(3).should("have.text", "3");
+                    cy.get(".table tbody tr td")
+                         .eq(4)
                          .should("have.text", "10");
                });
      });

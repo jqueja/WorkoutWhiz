@@ -1,4 +1,8 @@
 describe("The Login page", () => {
+     beforeEach(() => {
+          cy.viewport("iphone-6");
+     });
+
      it("successfully loads", () => {
           cy.visit("/login");
 
